@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <link rel="icon" type="image/x-icon" href="/the rpg project!!!.ico">
+        <link href="src/style.css" rel="stylesheet" type="text/css">
+        <title>TearonQ's Incremental</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <div id="app">
+            <canvas ref="canvas" id="canvas" style="height: 100vh; width: 100vw; position: absolute; top: 0vw; left: 0vw; z-index: -2;"></canvas>
+            <div id="offlineTime">
+                <div style="display: flex; flex-direction: column; align-items: center">
+                    <span class="fontTrebuchetMS whiteText" style="font-size: 16px">You are in offline time.</span>
+                    <span class="fontTrebuchetMS whiteText" style="font-size: 16px" id="offlineTimeDisplay"></span>
+                    <div id="offlineTimeProgress" style="height: 20px; width: 800px; position: relative; margin: 2px">
+                        <div id="offlineTimeProgressBarBase" style="background-color: #404040; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"></div>
+                        <div id="offlineTimeProgressBar" style="background-color: #c0c0c0; position: absolute; top: 0; left: 0; height: 100%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gameLoaded">
+                <div class="flex-container" style="background-color: #ffffff20">
+                    <div style="flex-grow: 1; flex-basis: 0; text-shadow: #ffffff 0vw 0vw 2px;" class="alignLeft bigText whiteText fontTrebuchetMS">
+                        <span id="pointCounter"></span> Points
+                    </div>
+                    <div style="flex-grow: 0.5; flex-basis: 0; text-shadow: #ffff00 0vw 0vw 1px;" class="alignCenter mediumBigText yellowText fontTrebuchetMS">
+                        FPS: <span id="fpsCounter"></span>
+                    </div>
+                    <div style="flex-grow: 1; flex-basis: 0; text-shadow: #ffffff 0vw 0vw 2px;" class="alignRight bigText whiteText fontTrebuchetMS">
+                        <span id="ppsCounter"></span>/s
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div style="font-size: 16px" class="whiteText grayShadow fontTrebuchetMS">
+                        Time since last save: <span id="timeSinceSave"></span>
+                    </div>
+                </div>
+                <div id="tabs" style="margin-bottom: 10px">
+                    <div class="flex-horizontal" style="flex-wrap: wrap;">
+                        <button id="buyableTabButton" class="fontTrebuchetMS canClick" style="color: #ffffff; background-color: #80808080; border: 3px solid #ffffff; height: 40px; width: 125px; font-size: 16px; margin: 2px;">
+                            Buyables
+                        </button>
+                        <button id="optionTabButton" class="fontTrebuchetMS canClick" style="color: #ffffff; background-color: #80808080; border: 3px solid #ffffff; height: 40px; width: 125px; font-size: 16px; margin: 2px;">
+                            Options
+                        </button>
+                        <button id="statTabButton" class="fontTrebuchetMS canClick" style="color: #ffffff; background-color: #80808080; border: 3px solid #ffffff; height: 40px; width: 125px; font-size: 16px; margin: 2px;">
+                            Stats
+                        </button>
+                        <button id="achievementTabButton" class="fontTrebuchetMS canClick" style="color: #ffffff; background-color: #80808080; border: 3px solid #ffffff; height: 40px; width: 125px; font-size: 16px; margin: 2px;">
+                            Achievements
+                        </button>
+                    </div>
+                </div>
+                <div id="buyables">
+                    <div id='buyableList' class="flex-horizontal" style="flex-wrap: wrap;"></div>
+                    <div id="praiReset" class="flex-vertical" style="margin-top: 10px">
+                        <button id="praiResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; height: 225px">
+                            <h3>PRai: <span id="praiAmount"></span></h3>
+                            Reset your progress to gain <span id="praiGain"></span> PRai.<br>
+                            <span id="praiReq">Gain at least <span id="praiReqAmt"></span> more points to do a PRai reset.<br></span>
+                            <span id="praiDesc"></span><br>
+                            <br>You have <span id="praiAmt2"></span> PRai, which boosts your points by <span id="praiEffect"></span>.
+                            <br>Resetting now will boost your points by <span id="praiBoostEffect"></span>
+                        </button>
+                    </div>
+                    <!-- <div id="pr2Reset" class="flex-vertical" style="margin-top: 10px">
+                        <button id="pr2ResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; height: 225px">
+                            <h3>PR2: <span id="pr2Amount"></span></h3>
+                            Reset your progress to ascend <span id="pr2Gain"></span> PR2 Levels.<br>
+                            <span id="pr2Req">Gain at least <span id="pr2ReqAmt"></span> more PRai to do a PR2 reset.<br></span>
+                            <span id="praiDesc"></span><br>
+                            <br>You have <span id="praiAmt2"></span> PRai, which boosts your points by <span id="praiEffect"></span>.
+                            <br>Resetting now will boost your points by <span id="praiBoostEffect"></span>
+                        </button>
+                    </div> -->
+                </div>
+            </div>
+
+            <div id="gameLoading">
+                <div class="flex-container" style="background-color: #ffffff20">
+                    <div style="flex-grow: 1; flex-basis: 0; text-align: left; text-shadow: #ffffff 0vw 0vw 2px;" class="bigText whiteText fontTrebuchetMS">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="module" src="src/main.ts"></script>
+    </body>
+</html>

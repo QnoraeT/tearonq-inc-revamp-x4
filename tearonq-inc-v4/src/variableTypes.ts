@@ -1,0 +1,98 @@
+import Decimal, { DecimalSource } from "break_eternity.js"
+
+export type Game = {
+    currentSave: number;
+    autoSaveInterval: number;
+    list: Array<{
+        name: string;
+        modes: Array<number>;
+        data: Player;
+    }>;
+};
+
+// * Everything in player has to be DecimalSource because saving to localStorage needs a string, and we'll get a string back, however, the Decimal variable can't really be made into a string without losing data
+// * simplest way of accounting for 'Decimals that might turn into strings'
+export type Player = {
+    lastUpdated: number,
+    lastUpdated2: number,
+    totalRealTime: number,
+    gameTime: DecimalSource,
+    setTimeSpeed: DecimalSource,
+    version: number,
+    settings: {
+        notation: number,
+        notationLimit: number
+    },
+    gameProgress: {
+        points: DecimalSource
+        totalPointsInPRai: DecimalSource
+        timeInPRai: DecimalSource
+        upgrades: Array<{
+            bought: DecimalSource
+            boughtInKua: DecimalSource
+            accumulated: DecimalSource
+            autobought: DecimalSource
+            auto: boolean
+        }>,
+        prai: DecimalSource,
+        praiAuto: boolean,
+        pr2: DecimalSource,
+        pr2Auto: boolean
+    }
+}
+
+export type Temp = {
+    gameTimeSpeed: Decimal,
+    inputSaveList: string,
+    gameIsRunning: boolean,
+    saveModes: Array<boolean>,
+    achievementList: Array<Array<number>>
+    offlineTime: {
+        active: boolean,
+        tickRemaining: number,
+        tickMax: number,
+        tickLength: number,
+    },
+    game: {
+        pointGen: Decimal,
+        upgrades: Array<{
+            cost: Decimal,
+            target: Decimal,
+            effect: Decimal,
+            effectBase: Decimal,
+            unlocked: boolean,
+            autoUnlocked: boolean,
+            canBuy: boolean
+        }>,
+        praiReq: Decimal,
+        praiGain: Decimal,
+        praiExp: Decimal,
+        praiNext: Decimal,
+        praiEffect: Decimal,
+        praiNextEffect: Decimal,
+        pr2Req: Decimal,
+        pr2Effect: Decimal
+    }
+}
+
+export type Tab = {
+    mainTab: number
+};
+
+export type GameVars = {
+    delta: number,
+    trueDelta: number,
+    lastFPSCheck: number,
+    fpsList: Array<number>,
+    tickList: Array<number>,
+    lastSave: number,
+    sessionTime: number,
+    sessionStart: number,
+    fps: number,
+    tick: number,
+    displayedFPS: string,
+    displayedTick: string,
+    warnings: {
+        negativePPS: boolean
+    }
+};

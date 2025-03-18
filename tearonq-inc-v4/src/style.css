@@ -1,0 +1,534 @@
+body {
+    background-color: #000;
+}
+
+::-webkit-scrollbar {
+    width: 24px;
+}
+
+::-webkit-scrollbar-track {
+    background: #29343a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c0c4c8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #e5eaf1;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.whiteText {
+    color: #fff;
+}
+
+.blackText {
+    color: #000;
+}
+
+.yellowText {
+    color: #ff0;
+}
+
+.grayShadow {
+    text-shadow: 2px 2px grey;
+}
+
+.fontVerdana {
+    font-family: "Verdana";
+}
+
+.fontTrebuchetMS {
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.hide {
+    display: none;
+}
+
+.alignLeft {
+    text-align: left;
+}
+
+.alignCenter {
+    text-align: center;
+}
+
+.alignRight {
+    text-align: right;
+}
+
+.mediumText {
+    font-size: 16px;
+}
+
+.mediumBigText {
+    font-size: 24px;
+}
+
+.bigText {
+    font-size: 40px;
+}
+
+.buyableButton {
+    transition-duration: 0.2s;
+    background-color: #1c2024;
+}
+
+.buyableButton:hover {
+    background-color: #384048;
+}
+
+.buyableAutoButton {
+    transition-duration: 0.2s;
+    border: 4px solid #384048;
+}
+
+.buyableAutoButton:hover {
+    border: 4px solid #515c68;
+}
+
+/* .text {
+    display: inline;
+}
+
+.mediumButton {
+    width: 12vw;
+    height: 9vw;
+}
+
+.thinMediumButton {
+    width: 12vw;
+    height: 2.5vw;
+}
+
+.largeButton {
+    width: 18vw;
+    height: 12vw;
+}
+
+.thinLargeButton {
+    width: 18vw;
+    height: 4vw;
+}
+
+.autoButton {
+    transition-duration: 0.2s;
+    background-color: #1c2024;
+}
+
+.generatorButton {
+    transition-duration: 0.2s;
+    background-color: #1c2024;
+}
+
+.generatorButton:hover {
+    background-color: #384048;
+    cursor: pointer;
+}
+
+.generatorButtonSelected {
+    transition-duration: 0.2s;
+    background-color: #404952;
+}
+
+.generatorButtonSelected:hover {
+    background-color: #5b6774;
+    cursor: pointer;
+}
+
+.kuaButton {
+    transition-duration: 0.2s;
+    background-color: #411853;
+    cursor: pointer;
+}
+
+.smallColBorder {
+    border: 0.15vw solid #ff4000;
+}
+
+.smallColBorder:hover {
+    border: 0.15vw solid #ff9775;
+}
+
+.normColBorder {
+    border: 0.36vw solid #ff4000;
+}
+
+.normColBorder:hover {
+    border: 0.36vw solid #ff9775;
+}
+
+.smallTaxBorder {
+    border: 0.15vw solid #ffd900;
+}
+
+.smallTaxBorder:hover {
+    border: 0.15vw solid #fff2a7;
+}
+
+.normTaxBorder {
+    border: 0.36vw solid #ffd900;
+}
+
+.normTaxBorder:hover {
+    border: 0.36vw solid #fff2a7;
+}
+
+.smallGroBorder {
+    border: 0.15vw solid #c36100;
+}
+
+.smallGroBorder:hover {
+    border: 0.15vw solid #ffa060;
+}
+
+.normGroBorder {
+    border: 0.36vw solid #c36100;
+}
+
+.normGroBorder:hover {
+    border: 0.36vw solid #ffa060;
+}
+
+.normColBorderProg {
+    border: 0.36vw solid #fffb00;
+}
+
+.normColBorderProg:hover {
+    border: 0.36vw solid #fffd75;
+}
+
+.normColBorderComp {
+    border: 0.36vw solid #00ff0d;
+}
+
+.normColBorderComp:hover {
+    border: 0.36vw solid #8cff75;
+}
+
+.colButtonHeader {
+    transition-duration: 0.2s;
+    background-color: #521400;
+}
+
+.colButtonDesc {
+    transition-duration: 0.2s;
+    background-color: #631900;
+}
+
+.colButtonRew {
+    transition-duration: 0.2s;
+    background-color: #8d2300;
+}
+
+.colButtonProg {
+    transition-duration: 0.2s;
+    background-color: #616300;
+    box-shadow: 0 0 0.6vw 0.24vw rgb(66, 54, 0);
+}
+
+.colButtonHeaderProg {
+    transition-duration: 0.2s;
+    background-color: #524300;
+}
+
+.colButtonDescProg {
+    transition-duration: 0.2s;
+    background-color: #634900;
+}
+
+.colButtonRewProg {
+    transition-duration: 0.2s;
+    background-color: #8d7800;
+}
+
+.colButtonComp {
+    transition-duration: 0.2s;
+    background-color: #006319;
+    box-shadow: 0 0 0.6vw 0.24vw rgb(0, 66, 6);
+}
+
+.colButtonHeaderComp {
+    transition-duration: 0.2s;
+    background-color: #005204;
+}
+
+.colButtonDescComp {
+    transition-duration: 0.2s;
+    background-color: #006300;
+}
+
+.colButtonRewComp {
+    transition-duration: 0.2s;
+    background-color: #108d00;
+}
+
+.main-container {
+    width: 15vw;
+    height: 22vw;
+}
+
+.first-cont,
+.second-cont,
+.third-cont {
+    position: relative;
+    width: 100%;
+    color: white;
+}
+
+.generic-text {
+    position: absolute;
+}
+
+.centered-text {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.colButton {
+    transition-duration: 0.2s;
+    background-color: #631900;
+    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 17, 0);
+}
+
+.colButton:hover {
+    background-color: #7a1f00;
+    box-shadow: 0 0 1.5vw 0.24vw #8f2400;
+    cursor: pointer;
+}
+
+.colButtonProg:hover {
+    background-color: #7a6e00;
+    box-shadow: 0 0 1.5vw 0.24vw #8f6e00;
+    cursor: pointer;
+}
+
+.colButtonComp:hover {
+    background-color: #187a00;
+    box-shadow: 0 0 1.5vw 0.24vw #188f00;
+    cursor: pointer;
+}
+
+.taxButton {
+    transition-duration: 0.2s;
+    background-color: #634c00;
+    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 54, 0);
+}
+
+.taxButton:hover {
+    background-color: #7a6800;
+    box-shadow: 0 0 1.5vw 0.24vw #8f7a00;
+    cursor: pointer;
+}
+
+.groButton {
+    transition-duration: 0.2s;
+    background-color: #632f00;
+    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 26, 0);
+}
+
+.groButton:hover {
+    background-color: #7a3900;
+    box-shadow: 0 0 1.5vw 0.24vw #8f3f00;
+    cursor: pointer;
+}
+
+.kuaButton:hover {
+    background-color: #610986;
+} */
+
+.alert {
+    box-shadow: 0 0 16px 2px #c00000;
+}
+
+.warning {
+    box-shadow: 0 0 16px 2px #c0c000;
+}
+
+.cannotClick {
+    cursor: not-allowed;
+}
+
+.canClick {
+    cursor: pointer;
+}
+
+.cannot {
+    border: 4px solid #400;
+}
+
+.cannot:hover {
+    border: 4px solid #600;
+    box-shadow: 0 0 16px 4px #300000;
+}
+
+.can {
+    border: 4px solid #040;
+    box-shadow: 0 0 16px 4px #002000;
+}
+
+.can:hover {
+    border: 4px solid #0f0;
+    box-shadow: 0 0 16px 6px #008000;
+}
+
+.complete {
+    border: 4px solid #008;
+    box-shadow: 0 0 16px 4px #000040;
+}
+
+.complete:hover {
+    border: 4px solid #00f;
+    box-shadow: 0 0 16px 6px #000080;
+}
+
+.nopeFill {
+    background-color: #400;
+}
+
+.nopeFill:hover {
+    background-color: #800;
+}
+
+.okFill {
+    background-color: #040;
+}
+
+.okFill:hover {
+    background-color: #080;
+}
+
+/* .kuaButton2 {
+    transition-duration: 0.2s;
+    border: 0.24vw solid #b900ff;
+    background-color: #4d008b;
+}
+
+.kuaButton2:hover {
+    border: 0.24vw solid #ca37ff;
+    background-color: #5f00ad;
+} */
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 450px;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 3px 0;
+    border: 2px solid #fff;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -200px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -2px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #222 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.slidecontainer {
+    width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none; /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 8px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+    transition: opacity 0.2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: #04aa6d; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 20px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: #04aa6d; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+/* taken from TMT ig */
+.popup {
+    border: 2px solid;
+    width: 90px;
+    min-height: 5px;
+    color: #000000;
+    display: block;
+    margin-top: 2px;
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.popup-container {
+    position: absolute;
+    z-index: 9999999999999999999999999999999999;
+    right: 9px;
+    width: 90px;
+}
