@@ -3,7 +3,7 @@ import { player, tmp } from "../loadSave"
 import { D } from "../misc/calc"
 import { html, tab, toHTMLvar } from "../main"
 import { format, formatTime } from "../misc/format"
-import { MAIN_UPG_DATA, updateGame_Main } from "./mainUpgrades"
+import { MAIN_UPG_DATA, updateGame_Main } from "./mainBuyables"
 
 export const initHTML_PRai = () => {
     toHTMLvar('praiReset');
@@ -33,8 +33,14 @@ export const updateGame_PRai = (delta: Decimal) => {
     }
 
     tmp.game.praiEffect = Decimal.max(player.gameProgress.prai, 0).add(1).log10().add(1).pow(2.633975697259367);
+    if (Decimal.gte(player.gameProgress.pr2, 6)) {
+        tmp.game.praiEffect = tmp.game.praiEffect.pow(2);
+    }
 
     tmp.game.praiNextEffect = Decimal.add(player.gameProgress.prai, tmp.game.praiGain).max(0).add(1).log10().add(1).pow(2.633975697259367);
+    if (Decimal.gte(player.gameProgress.pr2, 6)) {
+        tmp.game.praiNextEffect = tmp.game.praiNextEffect.pow(2);
+    }
 }
 
 export const updateHTML_PRai = () => {
@@ -55,10 +61,10 @@ export const updateHTML_PRai = () => {
         } else if (tmp.game.praiGain.lt(100) || Decimal.lt(player.gameProgress.prai, 100)) {
             html['praiDesc'].textContent = `Next in ${format(tmp.game.praiNext)} points. (${format(tmp.game.praiGain.div(player.gameProgress.timeInPRai), 2)}/s)`;
         } else {
-            html['praiDesc'].textContent = `Next OoM in ${format(tmp.game.praiNext)} points. (${format(tmp.game.praiGain.add(player.gameProgress.prai).div(player.gameProgress.prai).log10().div(player.gameProgress.timeInPRai), 2)} OoM/s)`;
+            html['praiDesc'].textContent = `Next OoM in ${format(tmp.game.praiNext)} points. (${format(tmp.game.praiGain.add(player.gameProgress.prai).div(player.gameProgress.prai).log10().div(player.gameProgress.timeInPRai), 3)} OoM/s)`;
         }
-        html['praiEffect'].textContent = `${format(tmp.game.praiEffect, 2)}×`;
-        html['praiBoostEffect'].textContent = `${format(tmp.game.praiNextEffect.div(tmp.game.praiEffect), 2)}×`;
+        html['praiEffect'].textContent = `${format(tmp.game.praiEffect, 2)}`;
+        html['praiBoostEffect'].textContent = `${format(tmp.game.praiNextEffect.div(tmp.game.praiEffect), 2)}`;
     }
 }
 
@@ -67,16 +73,16 @@ export const praiReset = (override: boolean) => {
         if (Decimal.lt(player.gameProgress.totalPointsInPRai, tmp.game.praiReq)) {
             return;
         }
+        player.gameProgress.prai = Decimal.add(player.gameProgress.prai, tmp.game.praiGain);
     }
 
-    player.gameProgress.prai = Decimal.add(player.gameProgress.prai, tmp.game.praiGain);
     player.gameProgress.points = D(0);
     player.gameProgress.totalPointsInPRai = D(0);
     player.gameProgress.timeInPRai = D(0);
     for (let i = 0; i < MAIN_UPG_DATA.length; i++) {
-        player.gameProgress.upgrades[i].accumulated = D(0);
-        player.gameProgress.upgrades[i].autobought = D(0);
-        player.gameProgress.upgrades[i].bought = D(0);
+        player.gameProgress.buyables[i].accumulated = D(0);
+        player.gameProgress.buyables[i].autobought = D(0);
+        player.gameProgress.buyables[i].bought = D(0);
     }
     updateGame_Main(D(0));
 }

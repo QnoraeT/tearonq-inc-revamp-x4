@@ -1,11 +1,15 @@
 import Decimal from 'break_eternity.js'
 import { game, gameVars, player, resetTheWholeGame, saveTheFrickingGame, tmp } from './loadSave';
-import { diePopupsDie } from './misc/popups';
+import { diePopupsDie, popupList, spawnPopup } from './misc/popups';
 import { Tab } from './variableTypes';
 import { format, formatTime } from './misc/format';
-import { updateGame_Main, updateHTML_Main } from './features/mainUpgrades';
+import { updateGame_Main, updateHTML_Main } from './features/mainBuyables';
 import { drawing } from './canvas';
 import { updateGame_PRai, updateHTML_PRai } from './features/prai';
+import { updateGame_PR2, updateHTML_PR2 } from './features/pr2';
+import { updateGame_StaticUpgrades, updateHTML_StaticUpgrades } from './features/staticUpgrades';
+import { updateGame_Kuaraniai, updateHTML_Kuaraniai } from './features/kuaraniai';
+import { updateGame_Options, updateHTML_Options } from './features/options';
 
 export const html: Record<string, HTMLElement> = {};
 export const toHTMLvar = (id: string) => {
@@ -20,7 +24,9 @@ export const el = (id: string): HTMLElement | null => document.getElementById(id
 export const elIm = (id: string): HTMLImageElement => document.getElementById(id)! as HTMLImageElement;
 
 export const tab: Tab = ({
-    mainTab: 0
+    mainTab: 0,
+    optionsTab: 0,
+    optionsSaveTab: 0
 });
 
 export const doOfflineTime = () => {
@@ -60,9 +66,9 @@ export const gameLoop = () => {
                 console.log('offline time activated');
                 tmp.offlineTime.active = true;
                 tmp.offlineTime.tickMax = Math.floor(gameVars.delta / tmp.offlineTime.tickLength);
-                if (tmp.offlineTime.tickMax > 100000) {
-                    tmp.offlineTime.tickLength = tmp.offlineTime.tickLength * (tmp.offlineTime.tickMax / 100000);
-                    tmp.offlineTime.tickMax = tmp.offlineTime.tickMax / (tmp.offlineTime.tickMax / 100000);
+                if (tmp.offlineTime.tickMax > 1000) {
+                    tmp.offlineTime.tickLength = tmp.offlineTime.tickLength * (tmp.offlineTime.tickMax / 1000);
+                    tmp.offlineTime.tickMax = tmp.offlineTime.tickMax / (tmp.offlineTime.tickMax / 1000);
                 }
                 tmp.offlineTime.tickRemaining = tmp.offlineTime.tickMax;
                 doOfflineTime();
@@ -103,10 +109,9 @@ export const gameLoop = () => {
             diePopupsDie();
             drawing();
 
-            if (gameVars.sessionTime > gameVars.lastSave + game.autoSaveInterval) {
-                console.log('game save?');
+            if (!gameVars.saveDisabled && gameVars.sessionTime > gameVars.lastSave + game.autoSaveInterval) {
                 saveTheFrickingGame();
-                // spawnPopup(0, `The game has been saved!`, `Save`, 5, `#00FF00`)
+                spawnPopup(0, `The game has been saved!`, `Save`, 3, `#00FF00`)
             }
 
             let end_time = Date.now();
@@ -130,20 +135,33 @@ export const gameLoop = () => {
         console.error(
             `The game has crashed! Here is the error(s) to report it to @TearonQ or @qnoraeT. \n\nYou can still export your save normally by going into Options -> Saving -> Save List -> Export Save or Export Save List to Clipboard. \nIf you see any NaNs, you might have a clue!`
         );
+        throw new Error('ok');
     }
 }
 
 export const updateGame = (delta: Decimal) => {
+    updateGame_Kuaraniai(delta);
+    updateGame_StaticUpgrades(delta);
+    updateGame_PR2(delta);
     updateGame_PRai(delta);
     updateGame_Main(delta);
+    updateGame_Options(delta);
 }
 
 export const updateHTML = () => {
+    for (let i = 0; i < popupList.length; i++) {
+        html[`popupID${i}`].style.opacity = `${popupList[i].opacity}`
+    }
+
     html['pointCounter'].textContent = `${format(player.gameProgress.points)}`;
     html['ppsCounter'].textContent = `${format(tmp.game.pointGen)}`;
     html['timeSinceSave'].textContent = `${formatTime(gameVars.sessionTime - gameVars.lastSave)} / ${formatTime(game.autoSaveInterval)}`;
     updateHTML_Main();
     updateHTML_PRai();
+    updateHTML_PR2();
+    updateHTML_StaticUpgrades();
+    updateHTML_Kuaraniai();
+    updateHTML_Options();
 }
 
 export let shiftDown = false;
@@ -168,4 +186,12 @@ document.onkeyup = function (e) {
 
 export const switchMainTab = (id: number) => {
     tab.mainTab = id;
+}
+
+export const switchOptionTab = (id: number) => {
+    tab.optionsTab = id;
+}
+
+export const switchOptionSaveTab = (id: number) => {
+    tab.optionsSaveTab = id;
 }

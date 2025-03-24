@@ -329,8 +329,8 @@ export const smoothPoly = (
 
 export const smoothExp = (x: DecimalSource, exp: DecimalSource, inv: boolean) => {
     return inv
-        ? Decimal.mul(x, Decimal.ln(exp)).add(1).log(exp)
-        : Decimal.pow(exp, x).sub(1).div(Decimal.ln(exp));
+        ? Decimal.mul(x, Decimal.sub(exp, 1)).add(1).log(exp)
+        : Decimal.pow(exp, x).sub(1).div(Decimal.sub(exp, 1));
 };
 
 export const sumHarmonicSeries = (x: DecimalSource) => {
@@ -357,10 +357,7 @@ export const buyMax = (
     resource: DecimalSource,
     bought: DecimalSource
 ) => {
-    if (
-        target(resource).lt(Number.MAX_SAFE_INTEGER) &&
-        Decimal.lt(resource, Decimal.pow10(Number.MAX_SAFE_INTEGER))
-    ) {
+    if (target(resource).lt(Number.MAX_SAFE_INTEGER) && Decimal.lt(resource, Decimal.pow10(Number.MAX_SAFE_INTEGER))) {
         let currentBought = target(resource).sub(9).floor().max(bought);
         let currCost = cost(currentBought);
         for (let i = 0; i < 10; i++) {

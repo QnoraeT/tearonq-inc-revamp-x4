@@ -3,19 +3,29 @@ import { Game, GameVars, Player, Temp } from "./variableTypes";
 import { spawnPopup } from "./misc/popups";
 import { updatePlayerData } from './versionControl';
 import { D } from './misc/calc';
-import { initHTML_Main, MAIN_UPG_DATA } from './features/mainUpgrades';
+import { initHTML_Main, MAIN_UPG_DATA as MAIN_BUYABLE_DATA } from './features/mainBuyables';
 import { gameLoop, html, switchMainTab, toHTMLvar } from './main';
 import { initHTML_PRai } from './features/prai';
+import { initHTML_PR2 } from './features/pr2';
+import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
+import { intiHTML_Kuaraniai } from './features/kuaraniai';
+import { intiHTML_Options, updateSaveFileListHTML } from './features/options';
 
 export const initPlayer = (set = false): Player => {
-    const mainUpgrades = [];
-    for (let i = 0; i < MAIN_UPG_DATA.length; i++) {
-        mainUpgrades.push({
+    const mainBuyables = [];
+    for (let i = 0; i < MAIN_BUYABLE_DATA.length; i++) {
+        mainBuyables.push({
             bought: D(0),
             boughtInKua: D(0),
             accumulated: D(0),
             autobought: D(0),
             auto: false
+        });
+    }
+    const staticUpgrades = [];
+    for (let i = 0; i < STATIC_UPGRADES.length; i++) {
+        staticUpgrades.push({
+            bought: D(0)
         });
     }
     const data = {
@@ -32,12 +42,21 @@ export const initPlayer = (set = false): Player => {
         gameProgress: {
             points: D(0),
             totalPointsInPRai: D(0),
-            timeInPRai: D(0),
-            upgrades: mainUpgrades,
+            buyables: mainBuyables,
+            staticUpgrades: [],
             prai: D(0),
             praiAuto: false,
+            timeInPRai: D(0),
             pr2: D(0),
-            pr2Auto: false
+            pr2Auto: false,
+            timeInPR2: D(0),
+            kua: D(0),
+            kuaAuto: false,
+            timeInKua: D(0),
+            kshard: D(0),
+            kpower: D(0),
+            staticUpgs: [0, 0, 0],
+            dynamicUpgs: [D(0), D(0), D(0)]
         }
     };
     if (set) {
@@ -47,6 +66,28 @@ export const initPlayer = (set = false): Player => {
 };
 
 function initTemp(): Temp {
+    const buyables = [];
+    for (let i = 0; i < MAIN_BUYABLE_DATA.length; i++) {
+        buyables.push({
+            cost: D(1),
+            target: D(0),
+            effect: D(0),
+            effectBase: D(0),
+            unlocked: false,
+            autoUnlocked: false,
+            canBuy: false
+        })
+    }
+    const staticUpgrades = [];
+    for (let i = 0; i < STATIC_UPGRADES.length; i++) {
+        staticUpgrades.push({
+            cost: D(1),
+            target: D(0),
+            effect: D(0),
+            unlocked: false,
+            canBuy: false
+        })
+    }
     const obj: Temp = {
         gameTimeSpeed: D(1),
         inputSaveList: 'Input your save list here!',
@@ -61,7 +102,7 @@ function initTemp(): Temp {
         },
         game: {
             pointGen: D(0),
-            upgrades: [],
+            buyables: buyables,
             praiReq: D(0),
             praiGain: D(0),
             praiExp: D(0),
@@ -69,7 +110,9 @@ function initTemp(): Temp {
             praiEffect: D(0),
             praiNextEffect: D(0),
             pr2Req: D(0),
-            pr2Effect: D(0)
+            pr2Effect: D(0),
+            staticUpgradeCap: D(1),
+            staticUpgrades: staticUpgrades
         }
     };
 
@@ -93,6 +136,8 @@ function loadGame(): void {
             console.error(`loading the game went wrong!`);
             console.error(e);
             console.error(localStorage.getItem(saveID)!);
+            gameVars.saveDisabled = true;
+            spawnPopup(0, `Failed to load your save file! Automatic saving has been disabled! Please wait while @TearonQ fixes this! See errors in console!`, `Failed to load save`, Infinity, `#FF0000`)
         }
     }
 
@@ -114,6 +159,7 @@ export const redoLoadingGame = () => {
 
 export const initHTML = () => {
     toHTMLvar('canvas');
+    toHTMLvar('popup-container');
 
     toHTMLvar('offlineTime');
     toHTMLvar('offlineTimeProgress');
@@ -126,11 +172,25 @@ export const initHTML = () => {
     toHTMLvar('gameLoading');
 
     toHTMLvar('tabs');
+    toHTMLvar('options');
+    toHTMLvar('options-notes');
+    toHTMLvar('options-links');
+    toHTMLvar('options-saving');
+    toHTMLvar('options-other');
+    toHTMLvar('options-updateLog');
+    toHTMLvar('options-cheats');
+    toHTMLvar('options-saving-saveList');
+    toHTMLvar('options-saving-saveCreate');
+    toHTMLvar('buyables');
+    toHTMLvar('upgrades');
+    toHTMLvar('kuaraniai');
 
     toHTMLvar('buyableTabButton');
     toHTMLvar('optionTabButton');
     toHTMLvar('statTabButton');
-    toHTMLvar('achievementTabButton')
+    toHTMLvar('achievementTabButton');
+    toHTMLvar('upgradeTabButton');
+    toHTMLvar('kuaraniaiTabButton');
 
     toHTMLvar('pointCounter');
     toHTMLvar('fpsCounter');
@@ -144,9 +204,15 @@ export const initHTML = () => {
     html['optionTabButton'].addEventListener('click', () => switchMainTab(1));
     html['statTabButton'].addEventListener('click', () => switchMainTab(2));
     html['achievementTabButton'].addEventListener('click', () => switchMainTab(3));
+    html['upgradeTabButton'].addEventListener('click', () => switchMainTab(4));
+    html['kuaraniaiTabButton'].addEventListener('click', () => switchMainTab(5)); 
 
+    intiHTML_Kuaraniai();
+    initHTML_StaticUpgrades();
+    initHTML_PR2();
     initHTML_PRai();
     initHTML_Main();
+    intiHTML_Options();
 }
 
 export const gameVars: GameVars = ({
@@ -164,7 +230,8 @@ export const gameVars: GameVars = ({
     displayedTick: '-.-',
     warnings: {
         negativePPS: false
-    }
+    },
+    saveDisabled: false
 });
 
 export const initGameBeforeSave = (): Game => {
@@ -175,7 +242,7 @@ export const initGameBeforeSave = (): Game => {
         autoSaveInterval: 5,
         list: [
             {
-                name: "Save #1",
+                name: "Save File",
                 modes: [],
                 data: data
             }
@@ -243,7 +310,7 @@ export const SAVE_MODES = [
     },
     {
         name: "Scaled Ruins",
-        desc: 'This mode adds many, many scaling increases into the game. Is IM:R calling? This also includes scaling increases beyond the legendary "Atomic" scaling. There will be a few added mechanics to help you deal with these softcaps, but overall the game will be harder.',
+        desc: 'This mode adds many, many scaling increases into the game. Is IM:R calling? There will be a few added mechanics to help you deal with these scalings, but overall the game will be harder.',
         borderColor: "#6040ff",
         borderSelectedColor: "#a080ff",
         bgColor: "#1f1a46",
@@ -300,9 +367,16 @@ export const displayModesNonOptArray = (modes: Array<boolean>): string => {
 export const saveTheFrickingGame = (clicked = false): void => {
     gameVars.lastSave = gameVars.sessionTime;
     localStorage.setItem(saveID, compressSave(game));
+    updateSaveFileListHTML();
     if (clicked) {
         spawnPopup(0, `The game has been saved!`, `Save`, 3, `#00FF00`);
     }
+    console.log(html)
+    let count = 0
+    for (let i in html) {
+        count++
+    }
+    console.log(count)
 };
 
 export const resetTheWholeGame = (prompt: boolean): void => {
@@ -397,6 +471,9 @@ export const createNewSave = (modes: Array<boolean>): void => {
 };
 
 export const switchToSave = (id: number): void => {
+    if (game.currentSave === id) {
+        return;
+    }
     game.currentSave = id;
     player = game.list[game.currentSave].data;
     saveTheFrickingGame();
@@ -446,6 +523,7 @@ export const deleteSave = (id: number): void => {
     if (id < game.currentSave) {
         game.currentSave--;
     }
+    updateSaveFileListHTML();
 };
 
 export const compressSave = (save: any): string => {

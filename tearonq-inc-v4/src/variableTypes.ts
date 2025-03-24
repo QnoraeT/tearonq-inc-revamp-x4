@@ -26,18 +26,29 @@ export type Player = {
     gameProgress: {
         points: DecimalSource
         totalPointsInPRai: DecimalSource
-        timeInPRai: DecimalSource
-        upgrades: Array<{
+        buyables: Array<{
             bought: DecimalSource
             boughtInKua: DecimalSource
             accumulated: DecimalSource
             autobought: DecimalSource
             auto: boolean
         }>,
-        prai: DecimalSource,
-        praiAuto: boolean,
-        pr2: DecimalSource,
+        staticUpgrades: Array<{
+            bought: DecimalSource
+        }>
+        prai: DecimalSource
+        praiAuto: boolean
+        timeInPRai: DecimalSource
+        pr2: DecimalSource
         pr2Auto: boolean
+        timeInPR2: DecimalSource
+        kua: DecimalSource
+        kuaAuto: boolean
+        timeInKua: DecimalSource
+        kshard: DecimalSource
+        kpower: DecimalSource
+        staticUpgs: Array<number> // like the old-style
+        dynamicUpgs: Array<DecimalSource> // the effects kinda work like exotic dimensions' yellow quarks
     }
 }
 
@@ -55,7 +66,7 @@ export type Temp = {
     },
     game: {
         pointGen: Decimal,
-        upgrades: Array<{
+        buyables: Array<{
             cost: Decimal,
             target: Decimal,
             effect: Decimal,
@@ -71,12 +82,22 @@ export type Temp = {
         praiEffect: Decimal,
         praiNextEffect: Decimal,
         pr2Req: Decimal,
-        pr2Effect: Decimal
+        pr2Effect: Decimal,
+        staticUpgradeCap: Decimal,
+        staticUpgrades: Array<{
+            effect: Decimal
+            cost: Decimal
+            target: Decimal
+            unlocked: boolean
+            canBuy: boolean
+        }>
     }
 }
 
 export type Tab = {
     mainTab: number
+    optionsTab: number
+    optionsSaveTab: number
 };
 
 export type GameVars = {
@@ -95,4 +116,5 @@ export type GameVars = {
     warnings: {
         negativePPS: boolean
     }
+    saveDisabled: boolean
 };
