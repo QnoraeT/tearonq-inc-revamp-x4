@@ -185,6 +185,32 @@
                         </div>
                     </div>
                     <div id="options-other">
+                        <div class="flex-horizontal">
+                            <button id="notationSetButton" class="fontTrebuchetMS normalTabButton" style="width: 200px; height: 60px; font-size: 12px; margin: 2px;">
+                                Switch Notation<br>
+                                Currently: <select name="notations" id="notationList">
+                                                <option value="0">Scientific</option>
+                                                <option value="1">Engineering</option>
+                                                <option value="2">Logarithm</option>
+                                                <option value="3">Logarithm Delayed</option>
+                                                <option value="4">Letters</option>
+                                                <option value="5">Infinity</option>
+                                            </select>
+                            </button>
+                            <div
+                            class="whiteText fontTrebuchetMS normalTabButton flex-vertical"
+                            style="padding: 0%; margin: 2px; width: 250px; height: 52px; border: 3px solid #fff;">
+                                <div class="whiteText relativeFullWidth" style="height: 40%">
+                                    <span style="position: absolute; left: 4px; top: 4px; font-size: 12px">Change when notation starts.</span>
+                                    <span id="notationStartLimit" style="position: absolute; right: 4px; top: 4px; font-size: 12px"></span>
+                                </div>
+                                <div class="relativeFullWidth" style="height: 60%">
+                                    <div class="slidecontainer" style="position: absolute; left: 3%; width: 94%;">
+                                        <input id="notationLimitSlider" class="slider" style="padding: 0vw; margin: 0vw" type="range" min="3" max="9"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- <div class="flex-container" style="flex-direction: row; justify-content: center">
                             <Basic_Button @click="switchNotation()" :html="`Switch notation. Currently: ${NOTATION_LIST[player.settings.notation]}`"/>
                             <Basic_Button @click="player.settings.scaleSoftColors = !player.settings.scaleSoftColors" :html="`Show scaling/softcap colors. Currently: ${player.settings.scaleSoftColors}`"/>
@@ -231,6 +257,7 @@
                 </div>
                 <div id="buyables" class="flex-vertical">
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px; text-align: center;">Every purchase of a buyable speeds up that buyable's cost growth.<br></span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px; text-align: center;">You can only buy up to <span id="buyableCap"></span> purchases of a buyable.<br></span>
                     <div id='buyableList' class="flex-horizontal" style="flex-wrap: wrap; width: 1200px; margin: auto"></div>
                     <div class="flex-horizontal">
                         <div id="praiReset" class="flex-vertical" style="margin: 4px; margin-top: 10px;">

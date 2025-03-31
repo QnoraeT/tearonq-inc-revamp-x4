@@ -61,8 +61,21 @@ export const updatePlayerData = (player: Player): Player => {
         player.version = 4;
     }
     if (player.version === 4) {
+        player.settings.notation = {
+            mixed: false,
+            mixedLimit: 66,
+            notationType: 0,
+            notationLimit: 8,
+        }
+        player.version = 5;
+    }
+    if (player.version === 5) {
+        player.settings.notation.mixed = true;
+        player.version = 6;
+    }
+    if (player.version === 5) {
 
-        // player.version = 5;
+        // player.version = 6;
     }
     return player;
 };

@@ -149,6 +149,11 @@ body {
     font-size: 1.2vw;
 }
 
+.relativeFullWidth {
+    position: relative;
+    width: 100%;
+}
+
 /* .text {
     display: inline;
 }

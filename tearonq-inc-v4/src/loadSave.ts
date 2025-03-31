@@ -36,8 +36,12 @@ export const initPlayer = (set = false): Player => {
         setTimeSpeed: D(1),
         version: 0,
         settings: {
-            notation: 0,
-            notationLimit: 8
+            notation: {
+                mixed: true,
+                mixedLimit: 66,
+                notationType: 0,
+                notationLimit: 8,
+            }
         },
         gameProgress: {
             points: D(0),
@@ -102,6 +106,7 @@ function initTemp(): Temp {
         },
         game: {
             pointGen: D(0),
+            buyableCap: D(100),
             buyables: buyables,
             praiReq: D(0),
             praiGain: D(0),
@@ -148,11 +153,16 @@ function loadGame(): void {
     gameVars.sessionStart = Date.now();
 
     tmp.gameIsRunning = true;
-    gameLoop();
+    setGameLoopInterval();
     return;
 }
 
+export const setGameLoopInterval = () => {
+    gameTick = setInterval(gameLoop, 16.7);
+}
+
 export const redoLoadingGame = () => {
+    clearInterval(gameTick);
     tmp.gameIsRunning = false;
     setTimeout(loadGame, 100);
 }
@@ -371,12 +381,6 @@ export const saveTheFrickingGame = (clicked = false): void => {
     if (clicked) {
         spawnPopup(0, `The game has been saved!`, `Save`, 3, `#00FF00`);
     }
-    console.log(html)
-    let count = 0
-    for (let i in html) {
-        count++
-    }
-    console.log(count)
 };
 
 export const resetTheWholeGame = (prompt: boolean): void => {
@@ -653,8 +657,12 @@ export const exportSaveList = (): void => {
 
 export const setAutosaveInterval = (): void => {
     const i = window.prompt(
-        "Set your new auto-saving interval in seconds. Set it to Infinity if you want to disable auto-saving."
+        "Set your new auto-saving interval in seconds. Set it to Infinity if you want to disable auto-saving. Cancel to keep your current auto-save interval."
     );
+
+    if (i === null) {
+        return;
+    }
 
     if (i === "") {
         alert("Your set autosave interval is empty...");

@@ -60,6 +60,7 @@ export const MAIN_UPG_DATA = [
 
 export const initHTML_Main = () => {
     toHTMLvar('buyables');
+    toHTMLvar('buyableCap');
     toHTMLvar('buyableList');
 
     let txt = ``;
@@ -129,7 +130,7 @@ export const updateGame_Main = (delta: Decimal) => {
                 tmp.game.buyables[i].cost = tmp.game.buyables[i].cost.mul(tmp.game.staticUpgrades[0].effect);
             }
             // end cost changes
-            tmp.game.buyables[i].canBuy = Decimal.gte(player.gameProgress.points, tmp.game.buyables[i].cost);
+            tmp.game.buyables[i].canBuy = Decimal.gte(player.gameProgress.points, tmp.game.buyables[i].cost) && Decimal.lt(player.gameProgress.buyables[i].bought, tmp.game.buyableCap);
 
             tmp.game.buyables[i].target = D(0);
             if (Decimal.gte(player.gameProgress.points, MAIN_UPG_DATA[i].baseCostGrowthData.scale[0])) {
@@ -151,6 +152,7 @@ export const updateGame_Main = (delta: Decimal) => {
                 }
                 // end scaling changes
                 tmp.game.buyables[i].target = smoothExp(tmp.game.buyables[i].target, MAIN_UPG_DATA[i].baseCostGrowthData.scale[2], true);
+                tmp.game.buyables[i].target = tmp.game.buyables[i].target.min(tmp.game.buyableCap);
             }
 
             tmp.game.buyables[i].effectBase = MAIN_UPG_DATA[i].baseEffectBase.val;
@@ -197,6 +199,7 @@ export const updateGame_Main = (delta: Decimal) => {
 export const updateHTML_Main = () => {
     html['buyables'].classList.toggle("hide", tab.mainTab !== 0);
     if (tab.mainTab === 0) {
+        html['buyableCap'].textContent = `${format(tmp.game.buyableCap)}`;
         for (let i = 0; i < MAIN_UPG_DATA.length; i++) {
             html[`buyable${i}`].classList.toggle("hide", !tmp.game.buyables[i].unlocked);
             if (tmp.game.buyables[i].unlocked) {
@@ -220,13 +223,17 @@ export const updateHTML_Main = () => {
 }
 
 export const buyMainBuyable = (id: number): void => {
-    if (Decimal.gte(player.gameProgress.points, tmp.game.buyables[id].cost)) {
-        player.gameProgress.points = Decimal.sub(player.gameProgress.points, tmp.game.buyables[id].cost);
-
-        player.gameProgress.buyables[id].bought = Decimal.add(player.gameProgress.buyables[id].bought, 1);
-        player.gameProgress.buyables[id].boughtInKua = Decimal.max(player.gameProgress.buyables[id].boughtInKua, player.gameProgress.buyables[id].bought);
-        updateGame_Main(D(0));
+    if (Decimal.gte(player.gameProgress.buyables[id].bought, tmp.game.buyableCap)) {
+        return;
     }
+    if (Decimal.lt(player.gameProgress.points, tmp.game.buyables[id].cost)) {
+        return;
+    }
+    player.gameProgress.points = Decimal.sub(player.gameProgress.points, tmp.game.buyables[id].cost);
+
+    player.gameProgress.buyables[id].bought = Decimal.add(player.gameProgress.buyables[id].bought, 1);
+    player.gameProgress.buyables[id].boughtInKua = Decimal.max(player.gameProgress.buyables[id].boughtInKua, player.gameProgress.buyables[id].bought);
+    updateGame_Main(D(0));
 }
 
 export const toggleMainBuyableAutobuyer = (id: number): void => {

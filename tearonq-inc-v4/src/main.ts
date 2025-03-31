@@ -1,5 +1,5 @@
 import Decimal from 'break_eternity.js'
-import { game, gameVars, player, resetTheWholeGame, saveTheFrickingGame, tmp } from './loadSave';
+import { game, gameTick, gameVars, player, resetTheWholeGame, saveTheFrickingGame, setGameLoopInterval, tmp } from './loadSave';
 import { diePopupsDie, popupList, spawnPopup } from './misc/popups';
 import { Tab } from './variableTypes';
 import { format, formatTime } from './misc/format';
@@ -45,7 +45,7 @@ export const doOfflineTime = () => {
         window.setTimeout(doOfflineTime, 0);
     } else {
         tmp.offlineTime.active = false;
-        gameLoop();
+        setGameLoopInterval();
     }
 }
 
@@ -66,12 +66,13 @@ export const gameLoop = () => {
                 console.log('offline time activated');
                 tmp.offlineTime.active = true;
                 tmp.offlineTime.tickMax = Math.floor(gameVars.delta / tmp.offlineTime.tickLength);
-                if (tmp.offlineTime.tickMax > 1000) {
-                    tmp.offlineTime.tickLength = tmp.offlineTime.tickLength * (tmp.offlineTime.tickMax / 1000);
-                    tmp.offlineTime.tickMax = tmp.offlineTime.tickMax / (tmp.offlineTime.tickMax / 1000);
+                if (tmp.offlineTime.tickMax > 10000) {
+                    tmp.offlineTime.tickLength = tmp.offlineTime.tickLength * (tmp.offlineTime.tickMax / 10000);
+                    tmp.offlineTime.tickMax = tmp.offlineTime.tickMax / (tmp.offlineTime.tickMax / 10000);
                 }
                 tmp.offlineTime.tickRemaining = tmp.offlineTime.tickMax;
                 doOfflineTime();
+                clearInterval(gameTick);
                 return;
             }
             if (gameVars.delta > 0) {
@@ -117,8 +118,6 @@ export const gameLoop = () => {
             let end_time = Date.now();
             let total_time = end_time - start_time;
             gameVars.tickList.push(total_time);
-            window.setTimeout(gameLoop, 16.7 - (total_time % 16.7));
-            player.lastUpdated2 = Date.now();
         }
     } catch (e) {
         console.error(e);
@@ -135,7 +134,7 @@ export const gameLoop = () => {
         console.error(
             `The game has crashed! Here is the error(s) to report it to @TearonQ or @qnoraeT. \n\nYou can still export your save normally by going into Options -> Saving -> Save List -> Export Save or Export Save List to Clipboard. \nIf you see any NaNs, you might have a clue!`
         );
-        throw new Error('ok');
+        clearInterval(gameTick);
     }
 }
 

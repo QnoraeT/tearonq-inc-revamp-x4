@@ -14,14 +14,17 @@ export type Game = {
 // * simplest way of accounting for 'Decimals that might turn into strings'
 export type Player = {
     lastUpdated: number,
-    lastUpdated2: number,
     totalRealTime: number,
     gameTime: DecimalSource,
     setTimeSpeed: DecimalSource,
     version: number,
     settings: {
-        notation: number,
-        notationLimit: number
+        notation: {
+            mixed: boolean,
+            mixedLimit: number,
+            notationType: number,
+            notationLimit: number,
+        }
     },
     gameProgress: {
         points: DecimalSource
@@ -66,6 +69,7 @@ export type Temp = {
     },
     game: {
         pointGen: Decimal,
+        buyableCap: Decimal,
         buyables: Array<{
             cost: Decimal,
             target: Decimal,
