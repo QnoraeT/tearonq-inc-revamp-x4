@@ -58,7 +58,6 @@ export const updateGame_Options = (delta: Decimal) => {
 }
 
 export const updateHTML_Options = () => {
-    html['optionTabButton'].classList.toggle("hide", Decimal.lt(player.gameProgress.pr2, 6));
     html['options'].classList.toggle("hide", tab.mainTab !== 1);
     if (tab.mainTab === 1) {
         html['options-notes'].classList.toggle("hide", tab.optionsTab !== 0);
