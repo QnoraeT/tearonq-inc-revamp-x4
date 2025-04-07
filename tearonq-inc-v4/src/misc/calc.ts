@@ -285,10 +285,10 @@ export const inverseQuad = (
 };
 
 export const inverseFact = (x: DecimalSource) => {
-    if (Decimal.gte(x, "ee18")) {
+    if (Decimal.gte(x, "eee18")) {
         return Decimal.log10(x);
     }
-    if (Decimal.gte(x, "ee4")) {
+    if (Decimal.gte(x, "eee4")) {
         return Decimal.log10(x).div(Decimal.log10(x).log10());
     }
     return Decimal.div(x, 2.5066282746310002).ln().div(Math.E).lambertw().add(1).exp().sub(0.5);
@@ -402,18 +402,8 @@ export const linearAdd = (
         : Decimal.sub(num, 1).mul(growth).add(Decimal.mul(base, 2)).mul(num).div(2);
 };
 
-export const logPowSoftcap = (num: DecimalSource, start: DecimalSource, inv: boolean) => {
-    if (Decimal.lte(num, start)) {
-        return new Decimal(num);
-    }
-    num = Decimal.log10(num);
-    start = Decimal.log10(start);
-    return inv
-        ? Decimal.sub(num, start)
-                .div(Decimal.ln(start))
-                .add(start)
-                .div(start)
-                .pow_base(start)
-                .pow10()
-        : Decimal.log(num, start).mul(start).sub(start).mul(Decimal.ln(start)).add(start).pow10();
-};
+export const invHarmonicSum = (x: DecimalSource) => {
+    return Decimal.gte(x, 1e7)
+        ? Decimal.sub(0.5772156649015329, x).exp().div(2).neg().lambertw().mul(2).recip().neg()
+        : Decimal.sub(x, 0.5772156649015329).mul(2).exp().mul(12).recip().neg().lambertw().mul(-3).sqrt().recip().sub(1).div(2)
+}

@@ -56,8 +56,8 @@ export const updatePlayerData = (player: Player): Player => {
         player.gameProgress.timeInKua = D(0);
         player.gameProgress.kshard = D(0);
         player.gameProgress.kpower = D(0);
-        player.gameProgress.staticUpgs = [0, 0, 0];
-        player.gameProgress.dynamicUpgs = [D(0), D(0), D(0)];
+        player.gameProgress.kuaStaticUpgs = [0, 0, 0];
+        player.gameProgress.kuaDynamicUpgs = [D(0), D(0), D(0)];
         player.version = 4;
     }
     if (player.version === 4) {
@@ -74,8 +74,14 @@ export const updatePlayerData = (player: Player): Player => {
         player.version = 6;
     }
     if (player.version === 5) {
+        player.gameProgress.prestigeEssence = D(0);
+        player.gameProgress.kuaStaticUpgs = [0, 0, 0];
+        player.gameProgress.kuaDynamicUpgs = [D(0), D(0), D(0)];
+        player.version = 6;
+    }
+    if (player.version === 6) {
 
-        // player.version = 6;
+        // player.version = 7;
     }
     return player;
 };

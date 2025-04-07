@@ -8,7 +8,7 @@ import { gameLoop, html, switchMainTab, toHTMLvar } from './main';
 import { initHTML_PRai } from './features/prai';
 import { initHTML_PR2 } from './features/pr2';
 import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
-import { intiHTML_Kuaraniai } from './features/kuaraniai';
+import { intiHTML_Kuaraniai, KUA_UPGRADES } from './features/kuaraniai';
 import { intiHTML_Options, updateSaveFileListHTML } from './features/options';
 
 export const initPlayer = (set = false): Player => {
@@ -51,6 +51,7 @@ export const initPlayer = (set = false): Player => {
             prai: D(0),
             praiAuto: false,
             timeInPRai: D(0),
+            prestigeEssence: D(0),
             pr2: D(0),
             pr2Auto: false,
             timeInPR2: D(0),
@@ -59,8 +60,12 @@ export const initPlayer = (set = false): Player => {
             timeInKua: D(0),
             kshard: D(0),
             kpower: D(0),
-            staticUpgs: [0, 0, 0],
-            dynamicUpgs: [D(0), D(0), D(0)]
+            kuaStaticUpgs: [0, 0, 0],
+            kuaDynamicUpgs: [D(0), D(0), D(0)],
+            colPower: D(0),
+            colCompleted: [],
+            colChallenge: null,
+            timeInCol: D(0),
         }
     };
     if (set) {
@@ -92,6 +97,14 @@ function initTemp(): Temp {
             canBuy: false
         })
     }
+    const kuaPowerUpgEffs = [];
+    for (let i = 0; i < KUA_UPGRADES.power.length; i++) {
+        kuaPowerUpgEffs.push(D(0));
+    }
+    const kuaUpgEffs = [];
+    for (let i = 0; i < KUA_UPGRADES.kua.length; i++) {
+        kuaUpgEffs.push(D(0));
+    }
     const obj: Temp = {
         gameTimeSpeed: D(1),
         inputSaveList: 'Input your save list here!',
@@ -105,6 +118,7 @@ function initTemp(): Temp {
             tickLength: 0.05,
         },
         game: {
+            inAnyChallenge: false,
             pointGen: D(0),
             buyableCap: D(100),
             buyables: buyables,
@@ -117,7 +131,18 @@ function initTemp(): Temp {
             pr2Req: D(0),
             pr2Effect: D(0),
             staticUpgradeCap: D(1),
-            staticUpgrades: staticUpgrades
+            staticUpgrades: staticUpgrades,
+            kuaReq: D(0),
+            kuaGain: D(0),
+            kuaNext: D(0),
+            ksGain: D(0),
+            kpGain: D(0),
+            kpupgEffs: kuaPowerUpgEffs,
+            kuupgEffs: kuaUpgEffs,
+            ksDynamicCost: D(1),
+            kpDynamicCost: D(1),
+            ksDynamicTarget: D(0),
+            kpDynamicTarget: D(0)
         }
     };
 
@@ -377,7 +402,6 @@ export const displayModesNonOptArray = (modes: Array<boolean>): string => {
 export const saveTheFrickingGame = (clicked = false): void => {
     gameVars.lastSave = gameVars.sessionTime;
     localStorage.setItem(saveID, compressSave(game));
-    updateSaveFileListHTML();
     if (clicked) {
         spawnPopup(0, `The game has been saved!`, `Save`, 3, `#00FF00`);
     }

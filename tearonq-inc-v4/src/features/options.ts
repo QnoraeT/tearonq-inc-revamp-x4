@@ -71,18 +71,18 @@ export const updateHTML_Options = () => {
             html['options-saving-saveList'].classList.toggle("hide", tab.optionsSaveTab !== 0);
             html['options-saving-saveCreate'].classList.toggle("hide", tab.optionsSaveTab !== 1);
             if (tab.optionsSaveTab === 0) {
-                for (let i = 0; i < game.list.length; i++) {
-                    let color = `2px solid ${gRC(gameVars.sessionTime, 1, 1)}`;
-                    html[`saveFile${i}`].style.border = game.currentSave === i ? color : '2px solid #788088';
-                    html[`saveFile${i}progBase`].style.backgroundColor = game.currentSave === i ? `${gRC(gameVars.sessionTime, 0.125, 1)}80` : '';
-                    html[`saveFile${i}progFill`].style.backgroundColor = game.currentSave === i ? `${gRC(gameVars.sessionTime, 0.5, 1)}80` : '#50586080';
-                    html[`saveFile${i}loadSave`].style.border = game.currentSave === i ? '2px solid #788088' : color;
-                    html[`saveFile${i}duplicateSave`].style.border = color;
-                    html[`saveFile${i}deleteSave`].style.border = color;
-                    html[`saveFile${i}renameSave`].style.border = color;
-                    html[`saveFile${i}importSave`].style.border = color;
-                    html[`saveFile${i}exportSave`].style.border = color;
-                }
+                // for (let i = 0; i < game.list.length; i++) {
+                //     let color = `2px solid ${gRC(gameVars.sessionTime, 1, 1)}`;
+                //     html[`saveFile${i}`].style.border = game.currentSave === i ? color : '2px solid #788088';
+                //     html[`saveFile${i}progBase`].style.backgroundColor = game.currentSave === i ? `${gRC(gameVars.sessionTime, 0.125, 1)}80` : '';
+                //     html[`saveFile${i}progFill`].style.backgroundColor = game.currentSave === i ? `${gRC(gameVars.sessionTime, 0.5, 1)}80` : '#50586080';
+                //     html[`saveFile${i}loadSave`].style.border = game.currentSave === i ? '2px solid #788088' : color;
+                //     html[`saveFile${i}duplicateSave`].style.border = color;
+                //     html[`saveFile${i}deleteSave`].style.border = color;
+                //     html[`saveFile${i}renameSave`].style.border = color;
+                //     html[`saveFile${i}importSave`].style.border = color;
+                //     html[`saveFile${i}exportSave`].style.border = color;
+                // }
             }
         }
         if (tab.optionsTab === 3) {
@@ -95,7 +95,7 @@ export const updateSaveFileListHTML = () => {
     let txt = ``
     for (let i = 0; i < game.list.length; i++) {
         txt += `
-            <div id="saveFile${i}" style="position: relative; min-height: 19%; height: 19%; width: 98%; margin-top: 1%;"> 
+            <div id="saveFile${i}" class="${game.currentSave === i ? '' : 'rainbowBorder'}" style="position: relative; min-height: 19%; height: 19%; width: 98%; margin-top: 1%;${game.currentSave === i ? ' border: 2px solid #788088;' : ''} "> 
                 <div style="height: 100%; width: 100%">
                     <div style="height: 100%; width: 100%; position: relative">
                         <div id="saveFile${i}progBase" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;"></div>
@@ -121,22 +121,22 @@ export const updateSaveFileListHTML = () => {
                                     <span id="saveFile${i}offlineInfo" style="font-size: 12px" class="whiteText"></span>
                                 </div>
                                 <div style="flex-grow: 1; flex-basis: 0; text-align: right; font-size: 15px;" class="whiteText">
-                                    <button id="saveFile${i}loadSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}loadSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton ${game.currentSave === i ? '' : 'rainbowBorder'} canClick" style="${game.currentSave === i ? 'border: 2px solid #788088' : ''}">
                                         Load Save
                                     </button>
-                                    <button id="saveFile${i}duplicateSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}duplicateSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton rainbowBorder canClick">
                                         Duplicate Save
                                     </button>
-                                    <button id="saveFile${i}deleteSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}deleteSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton rainbowBorder canClick">
                                         Delete Save
                                     </button>
-                                    <button id="saveFile${i}renameSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}renameSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton rainbowBorder canClick">
                                         Rename Save
                                     </button>
-                                    <button id="saveFile${i}importSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}importSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton rainbowBorder canClick">
                                         Import Save
                                     </button>
-                                    <button id="saveFile${i}exportSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton canClick">
+                                    <button id="saveFile${i}exportSave" class="whiteText fontTrebuchetMS buyableButton saveListMiniButton rainbowBorder canClick">
                                         Export Save
                                     </button>
                                 </div>

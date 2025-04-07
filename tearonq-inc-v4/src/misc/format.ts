@@ -79,7 +79,7 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
     if (Decimal.isNaN(number)) return "NaN";
     if (!Decimal.isFinite(number)) return "Infinity";
     try {
-        if (player.settings.notation.mixed && mixedToggle && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
+        if (notation !== 4 && player.settings.notation.mixed && mixedToggle && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
             if (Decimal.gte(number, Decimal.pow10(player.settings.notation.notationLimit)) && Decimal.lt(number, Decimal.pow10(player.settings.notation.mixedLimit))) {
                 const abb = Decimal.log10(number).mul(0.33333333336666665).floor();
                 return `${Decimal.div(number, abb.mul(3).pow10()).toNumber().toFixed(expdec)} ${formatStandard(number)}`;
@@ -103,18 +103,19 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
                 } else {
                     return `F${format(Decimal.slog(number), Math.max(dec, 3), expdec)}`;
                 }
-            case 4: // letters
+            case 4:
                 if (Decimal.gte(number, 1e3) && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
                     const abb = Decimal.log10(number).mul(0.33333333336666665).floor();
                     return `${Decimal.div(number, abb.mul(3).pow10()).toNumber().toFixed(expdec)} ${formatLetter(abb.sub(1), "")}`;
                 }
-                return format(number, dec, expdec, 1);
+                return format(number, dec, expdec, 0);
             default:
+                console.error(typeof notation)
                 throw new Error(`${player.settings.notation.notationType} is not a valid notation index!`);
         }
     } catch(e) {
         console.warn(
-            `There was an error trying to get player.settings.notation! Falling back to Mixed Scientific...\n\nIf you have an object that has an item that uses format() without it being a get or function, this will occurr on load!`
+            `There was an error trying to get player.settings.notation.notationType! Falling back to Mixed Scientific...\n\nIf you have an object that has an item that uses format() without it being a get or function, this will occurr on load!`
         );
         console.warn(e);
         if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).neg().pow10())) {

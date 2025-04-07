@@ -42,6 +42,7 @@ export type Player = {
         prai: DecimalSource
         praiAuto: boolean
         timeInPRai: DecimalSource
+        prestigeEssence: DecimalSource
         pr2: DecimalSource
         pr2Auto: boolean
         timeInPR2: DecimalSource
@@ -50,8 +51,12 @@ export type Player = {
         timeInKua: DecimalSource
         kshard: DecimalSource
         kpower: DecimalSource
-        staticUpgs: Array<number> // like the old-style
-        dynamicUpgs: Array<DecimalSource> // the effects kinda work like exotic dimensions' yellow quarks
+        kuaStaticUpgs: Array<number> // like the old-style
+        kuaDynamicUpgs: Array<DecimalSource> // the effects kinda work like exotic dimensions' yellow quarks
+        colPower: DecimalSource
+        colCompleted: Array<DecimalSource>
+        colChallenge: number | null
+        timeInCol: DecimalSource
     }
 }
 
@@ -68,6 +73,7 @@ export type Temp = {
         tickLength: number,
     },
     game: {
+        inAnyChallenge: boolean,
         pointGen: Decimal,
         buyableCap: Decimal,
         buyables: Array<{
@@ -95,6 +101,17 @@ export type Temp = {
             unlocked: boolean
             canBuy: boolean
         }>
+        kuaReq: Decimal
+        kuaGain: Decimal
+        kuaNext: Decimal
+        ksGain: Decimal
+        kpGain: Decimal
+        kpupgEffs: Array<Decimal>
+        kuupgEffs: Array<Decimal>
+        ksDynamicCost: Decimal
+        kpDynamicCost: Decimal
+        ksDynamicTarget: Decimal
+        kpDynamicTarget: Decimal
     }
 }
 

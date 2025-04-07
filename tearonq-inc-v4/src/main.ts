@@ -174,7 +174,7 @@ document.onkeydown = function (e) {
         player.lastUpdated = Date.now() - 1000 * 60 * 60 * 24 * 365
     }
     if (ctrlDown) {
-        resetTheWholeGame(false);
+        resetTheWholeGame(true);
     }
 };
 

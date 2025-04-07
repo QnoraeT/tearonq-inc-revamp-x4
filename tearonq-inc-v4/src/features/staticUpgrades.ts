@@ -20,11 +20,11 @@ export const STATIC_UPGRADES = [
     {
         id: 1,
         get desc() {
-            return `PRai gives another, scarcer, but stronger boost to points. Currently: ×${format(tmp.game.staticUpgrades[this.id].effect)}, Next at ${format(Decimal.max(player.gameProgress.prai, 10).log10().log2().sub(2).max(0).floor().add(3).pow_base(2).pow10())} PRai.`;
+            return `PRai gives another, scarcer, but stronger boost to points. Currently: ×${format(tmp.game.staticUpgrades[this.id].effect)}, Next at ${format(Decimal.max(player.gameProgress.prai, 10).log10().add(1).sqrt().add(1).floor().pow(2).sub(1).pow10())} PRai.`;
         },
         cost: D(2.5e8),
         eff: new EffectCache(() => {
-            return Decimal.max(player.gameProgress.prai, 10).log10().log2().sub(2).max(0).floor().pow10();
+            return Decimal.max(player.gameProgress.prai, 1e7).log10().add(1).sqrt().sub(2).floor().pow10();
         }),
         egt: "pow"
     },
