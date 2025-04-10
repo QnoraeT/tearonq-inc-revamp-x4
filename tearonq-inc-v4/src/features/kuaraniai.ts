@@ -1,4 +1,4 @@
-import Decimal from "break_eternity.js";
+import Decimal, { DecimalSource } from "break_eternity.js";
 import { html, tab, toHTMLvar } from "../main";
 import { player, tmp } from "../loadSave";
 import { format } from "../misc/format";
@@ -161,6 +161,256 @@ export const KUA_UPGRADES = {
     kua: []
 }
 
+export type KuaDynamic = {
+    shard: Array<{
+        level(x?: DecimalSource): Decimal
+        effPer: Decimal
+        eff: EffectCache
+        descPer: string
+        descTotal: string
+    }>
+    power: Array<{
+        level(x?: DecimalSource): Decimal
+        effPer: Decimal
+        eff: EffectCache
+        descPer: string
+        descTotal: string
+    }>
+}
+export const KUA_DYNAMICS: KuaDynamic = {
+    shard: [
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[0]) {
+                return D(x)
+            },
+            effPer: D(2),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.shard[0].level().pow_base(2)
+            }),
+            get descPer() {
+                return `PRai gain outside of any challenge is increased by ${format(this.effPer)}×.`
+            },
+            get descTotal() {
+                return `PRai gain outside of any challenge is increased by ${format(tmp.game.ksdynEffs[0])}×.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(30).sub(3).div(3).add(1).floor().max(0)
+            },
+            effPer: D(0.8),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.shard[1].level().mul(0.8)
+            }),
+            get descPer() {
+                return `PE effect exponent is increased by +${format(0.8, 2)}.`
+            },
+            get descTotal() {
+                return `PE effect exponent is increased by +${format(tmp.game.ksdynEffs[1])}.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[2]) {
+                return D(x).min(99).sub(5).div(2).add(1).floor().max(0)
+            },
+            effPer: Decimal.root(1e6, 48),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.shard[2].level().div(48).pow_base(1e6)
+            }),
+            get descPer() {
+                return `Point gain in colosseum challenges are increased by ~${format(Decimal.root(1e6, 48), 2)}×.`
+            },
+            get descTotal() {
+                return `Point gain in colosseum challenges are increased by ${format(tmp.game.ksdynEffs[2])}×.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[3]) {
+                return D(x).min(68).sub(10).div(2).add(1).floor().max(0)
+            },
+            effPer: D(1e10),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.shard[3].level().pow_base(1e10)
+            }),
+            get descPer() {
+                return `PR3's requirement is decreased by ${format(this.effPer, 2)}×.`
+            },
+            get descTotal() {
+                return `PR3's requirement is decreased by ${format(tmp.game.ksdynEffs[3])}×.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[4]) {
+                return D(x).min(60).sub(12).div(6).add(1).floor().max(0)
+            },
+            get effPer() {
+                return KUA_DYNAMICS.shard[4].level().add(6).pow10()
+            },
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.shard[4].level().mul(KUA_DYNAMICS.shard[4].level().add(11)).div(2).pow10()
+            }),
+            get descPer() {
+                return `Buyable 4-5's costs are decreased by /${format(this.effPer, 2)}.`
+            },
+            get descTotal() {
+                return `Buyable 4-5's costs are decreased by /${format(tmp.game.ksdynEffs[4])}×.`
+            }
+        },
+    ],
+    power: [
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x)
+            },
+            effPer: D(2),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[0].level().pow_base(2)
+            }),
+            get descPer() {
+                return `Point gain outside of any challenge is increased by ${format(this.effPer)}×.`
+            },
+            get descTotal() {
+                return `Point gain outside of any challenge is increased by ${format(tmp.game.kpdynEffs[0])}×.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(10).sub(2).div(2).add(1).floor().max(0)
+            },
+            effPer: D(0.1),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[1].level().mul(0.1)
+            }),
+            get descPer() {
+                return `Buyable 1 scales -${format(this.effPer.mul(100))}% slower.`
+            },
+            get descTotal() {
+                return `Buyable 1 scales -${format(tmp.game.kpdynEffs[1].mul(100))}% slower.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(50).sub(5).div(5).add(1).floor().max(0)
+            },
+            effPer: D(0.001),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[2].level().mul(0.001)
+            }),
+            get descPer() {
+                return `Buyable 3's effect base is added by +${format(this.effPer, 3)}.`
+            },
+            get descTotal() {
+                return `Buyable 3's effect base is added by +${format(tmp.game.kpdynEffs[2], 3)}.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).sub(5).max(0)
+            },
+            effPer: D(1),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[3].level()
+            }),
+            get descPer() {
+                return `Increase the buyable cap by +${format(this.effPer)}.`
+            },
+            get descTotal() {
+                return `Increase the buyable cap by +${format(tmp.game.kpdynEffs[3])}.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(704).sub(8).div(3).add(1).floor().max(0)
+            },
+            effPer: D(1.01),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[4].level().pow_base(1.01)
+            }),
+            get descPer() {
+                return `Buyable 2's effect base is multiplied by ×${format(this.effPer, 2)}.`
+            },
+            get descTotal() {
+                return `Buyable 2's effect base is multiplied by ×${format(tmp.game.kpdynEffs[4], 2)}.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(51).sub(9).div(2).add(1).floor().max(0)
+            },
+            effPer: Decimal.root(1.5, 25),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[5].level().div(25).pow_base(1.5)
+            }),
+            get descPer() {
+                return `PRai effect is raised to the power of ^${format(this.effPer, 3)}.`
+            },
+            get descTotal() {
+                return `PRai effect is raised to the power of ^${format(tmp.game.kpdynEffs[5], 3)}.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(640).sub(10).div(10).add(1).floor().max(0)
+            },
+            effPer: D(65536),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[6].level().pow_base(65536)
+            }),
+            get descPer() {
+                return `Point gain outside of any challenge is increased by ${format(this.effPer)}×.`
+            },
+            get descTotal() {
+                return `Point gain outside of any challenge is increased by ${format(tmp.game.kpdynEffs[6])}×.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(66).sub(12).div(6).add(1).floor().max(0)
+            },
+            effPer: D(0.05),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[7].level().mul(0.05)
+            }),
+            get descPer() {
+                return `Buyable 2 scales -${format(this.effPer.mul(100))}% slower.`
+            },
+            get descTotal() {
+                return `Buyable 2 scales -${format(tmp.game.kpdynEffs[7].mul(100))}% slower.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(99).sub(15).div(7).add(1).floor().max(0)
+            },
+            effPer: D(0.05),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[8].level().mul(0.04)
+            }),
+            get descPer() {
+                return `Buyable 3 scales -${format(this.effPer.mul(100))}% slower.`
+            },
+            get descTotal() {
+                return `Buyable 4 scales -${format(tmp.game.kpdynEffs[8].mul(100))}% slower.`
+            }
+        },
+        {
+            level(x = player.gameProgress.kuaDynamicUpgs[1]) {
+                return D(x).min(100).sqrt().sub(4).floor().max(0)
+            },
+            effPer: Decimal.root(1.1, 6),
+            eff: new EffectCache(() => {
+                return KUA_DYNAMICS.power[9].level().div(6).pow_base(1.1)
+            }),
+            get descPer() {
+                return `Point gain is raised to the power of ^${format(this.effPer, 3)}.`
+            },
+            get descTotal() {
+                return `Point gain is raised to the power of ^${format(tmp.game.kpdynEffs[9], 3)}.`
+            }
+        },
+    ]
+}
+
 export const intiHTML_Kuaraniai = () => {
     toHTMLvar('praiAmt4');
     toHTMLvar('kshardAmount')
@@ -263,10 +513,12 @@ export const updateHTML_Kuaraniai = () => {
                 html[`kshardSU${i}Effects`].textContent = `${KUA_UPGRADES.shard[i].desc}`
             }
         }
-        html[`kshardDynamicUpgButton`].classList.toggle("complete", Decimal.gte(player.gameProgress.kshard, tmp.game.ksDynamicCost));
-        html[`kshardDynamicUpgButton`].classList.toggle("cannotClick", Decimal.gte(player.gameProgress.kshard, tmp.game.ksDynamicCost));
-        html[`kshardDynamicUpgButton`].classList.toggle("cannot", Decimal.gte(player.gameProgress.kshard, tmp.game.ksDynamicCost));
+        html[`kshardDynamicUpgButton`].classList.toggle("canClick", Decimal.gte(player.gameProgress.kshard, tmp.game.ksDynamicCost));
+        html[`kshardDynamicUpgButton`].classList.toggle("cannotClick", Decimal.lt(player.gameProgress.kshard, tmp.game.ksDynamicCost));
+        html[`kshardDynamicUpgButton`].classList.toggle("cannot", Decimal.lt(player.gameProgress.kshard, tmp.game.ksDynamicCost));
         html[`kshardDynamicUpgButton`].classList.toggle("can", Decimal.gte(player.gameProgress.kshard, tmp.game.ksDynamicCost));
+        html[`kshardDUAmount`].textContent = `${format(player.gameProgress.kuaDynamicUpgs[0])}`
+        html[`kshardDUCost`].textContent = `${format(tmp.game.ksDynamicCost)}`
 
         html['kpowerAmount'].textContent = `${format(player.gameProgress.kpower, 2)}`
         html['kpowerGeneration'].textContent = `${format(tmp.game.kpGain, 2)}`
@@ -287,10 +539,12 @@ export const updateHTML_Kuaraniai = () => {
                 html[`kpowerSU${i}Effects`].textContent = `${KUA_UPGRADES.power[i].desc}`
             }
         }
-        html[`kpowerDynamicUpgButton`].classList.toggle("complete", Decimal.gte(player.gameProgress.kpower, tmp.game.kpDynamicCost));
-        html[`kpowerDynamicUpgButton`].classList.toggle("cannotClick", Decimal.gte(player.gameProgress.kpower, tmp.game.kpDynamicCost));
-        html[`kpowerDynamicUpgButton`].classList.toggle("cannot", Decimal.gte(player.gameProgress.kpower, tmp.game.kpDynamicCost));
+        html[`kpowerDynamicUpgButton`].classList.toggle("canClick", Decimal.gte(player.gameProgress.kpower, tmp.game.kpDynamicCost));
+        html[`kpowerDynamicUpgButton`].classList.toggle("cannotClick", Decimal.lt(player.gameProgress.kpower, tmp.game.kpDynamicCost));
+        html[`kpowerDynamicUpgButton`].classList.toggle("cannot", Decimal.lt(player.gameProgress.kpower, tmp.game.kpDynamicCost));
         html[`kpowerDynamicUpgButton`].classList.toggle("can", Decimal.gte(player.gameProgress.kpower, tmp.game.kpDynamicCost));
+        html[`kpowerDUAmount`].textContent = `${format(player.gameProgress.kuaDynamicUpgs[1])}`
+        html[`kpowerDUCost`].textContent = `${format(tmp.game.kpDynamicCost)}`
     }
 }
 

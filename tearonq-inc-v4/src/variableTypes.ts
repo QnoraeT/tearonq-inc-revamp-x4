@@ -108,6 +108,8 @@ export type Temp = {
         kpGain: Decimal
         kpupgEffs: Array<Decimal>
         kuupgEffs: Array<Decimal>
+        ksdynEffs: Array<Decimal>
+        kpdynEffs: Array<Decimal>
         ksDynamicCost: Decimal
         kpDynamicCost: Decimal
         ksDynamicTarget: Decimal

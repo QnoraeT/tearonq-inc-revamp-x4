@@ -8,7 +8,7 @@ import { gameLoop, html, switchMainTab, toHTMLvar } from './main';
 import { initHTML_PRai } from './features/prai';
 import { initHTML_PR2 } from './features/pr2';
 import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
-import { intiHTML_Kuaraniai, KUA_UPGRADES } from './features/kuaraniai';
+import { intiHTML_Kuaraniai, KUA_DYNAMICS, KUA_UPGRADES } from './features/kuaraniai';
 import { intiHTML_Options, updateSaveFileListHTML } from './features/options';
 
 export const initPlayer = (set = false): Player => {
@@ -105,6 +105,14 @@ function initTemp(): Temp {
     for (let i = 0; i < KUA_UPGRADES.kua.length; i++) {
         kuaUpgEffs.push(D(0));
     }
+    const kuaShardDynamicEffs = [];
+    for (let i = 0; i < KUA_DYNAMICS.shard.length; i++) {
+        kuaShardDynamicEffs.push(D(0));
+    }
+    const kuaPowerDynamicEffs = [];
+    for (let i = 0; i < KUA_DYNAMICS.power.length; i++) {
+        kuaPowerDynamicEffs.push(D(0));
+    }
     const obj: Temp = {
         gameTimeSpeed: D(1),
         inputSaveList: 'Input your save list here!',
@@ -139,6 +147,8 @@ function initTemp(): Temp {
             kpGain: D(0),
             kpupgEffs: kuaPowerUpgEffs,
             kuupgEffs: kuaUpgEffs,
+            ksdynEffs: kuaShardDynamicEffs,
+            kpdynEffs: kuaPowerDynamicEffs,
             ksDynamicCost: D(1),
             kpDynamicCost: D(1),
             ksDynamicTarget: D(0),
