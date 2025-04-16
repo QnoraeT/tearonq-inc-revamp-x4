@@ -1,5 +1,5 @@
 import Decimal from 'break_eternity.js'
-import { game, gameTick, gameVars, player, resetTheWholeGame, saveTheFrickingGame, setGameLoopInterval, tmp } from './loadSave';
+import { game, gameTick, gameVars, player, saveTheFrickingGame, setGameLoopInterval, tmp } from './loadSave';
 import { diePopupsDie, popupList, spawnPopup } from './misc/popups';
 import { Tab } from './variableTypes';
 import { format, formatTime } from './misc/format';
@@ -8,7 +8,7 @@ import { drawing } from './canvas';
 import { updateGame_PRai, updateHTML_PRai } from './features/prai';
 import { updateGame_PR2, updateHTML_PR2 } from './features/pr2';
 import { updateGame_StaticUpgrades, updateHTML_StaticUpgrades } from './features/staticUpgrades';
-import { updateGame_Kuaraniai, updateHTML_Kuaraniai } from './features/kuaraniai';
+import { kuaDynamicUpgEffDisplay, updateGame_Kuaraniai, updateHTML_Kuaraniai } from './features/kuaraniai';
 import { updateGame_Options, updateHTML_Options } from './features/options';
 
 export const html: Record<string, HTMLElement> = {};
@@ -169,18 +169,21 @@ export let ctrlDown = false;
 document.onkeydown = function (e) {
     shiftDown = e.shiftKey;
     ctrlDown = e.ctrlKey;
-    // ! thing
+
     if (shiftDown) {
-        player.lastUpdated = Date.now() - 1000 * 60 * 60 * 24 * 365
-    }
-    if (ctrlDown) {
-        resetTheWholeGame(true);
+        kuaDynamicUpgEffDisplay('shard', true)
+        kuaDynamicUpgEffDisplay('power', true)
     }
 };
 
 document.onkeyup = function (e) {
     shiftDown = e.shiftKey;
     ctrlDown = e.ctrlKey;
+
+    if (shiftDown) {
+        kuaDynamicUpgEffDisplay('shard', false)
+        kuaDynamicUpgEffDisplay('power', false)
+    }
 };
 
 export const switchMainTab = (id: number) => {

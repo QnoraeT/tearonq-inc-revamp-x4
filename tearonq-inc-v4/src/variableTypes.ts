@@ -104,6 +104,8 @@ export type Temp = {
         kuaReq: Decimal
         kuaGain: Decimal
         kuaNext: Decimal
+        kuaEffect: Decimal
+        kuaNextEffect: Decimal
         ksGain: Decimal
         kpGain: Decimal
         kpupgEffs: Array<Decimal>

@@ -13,21 +13,46 @@ body {
 }
 
 @keyframes kuaraniaiBorder {
-    0%   { border: 4px solid #80f; }
-    50%  { border: 4px solid #f0f; }
-    100% { border: 4px solid #80f; }
+    0%   { border: 4px solid #40f; }
+    50%  { border: 4px solid #c0c; }
+    100% { border: 4px solid #40f; }
+}
+
+@keyframes kuaraniaiBGColor {
+    0%   { background-color: #20008080; }
+    50%  { background-color: #40004080; }
+    100% { background-color: #20008080; }
+}
+
+@keyframes kuaraniaiBGColorHovered {
+    0%   { background-color: #4000FF60; }
+    50%  { background-color: #80008060; }
+    100% { background-color: #4000FF60; }
 }
 
 .rainbowBorder {
     animation-name: rainbowBorder;
     animation-duration: 8s;
     animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
 
 .kuaraniaiBorder {
     animation-name: kuaraniaiBorder;
-    animation-duration: 5s;
+    animation-duration: 8s;
     animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.kuaraniaiBGColor {
+    animation-name: kuaraniaiBGColor;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.kuaraniaiBGColor:hover {
+    animation-name: kuaraniaiBGColorHovered;
 }
 
 ::-webkit-scrollbar {

@@ -6,6 +6,15 @@ import { Player } from "./variableTypes";
 
 export const updatePlayerData = (player: Player): Player => {
     player.version = player.version || -1;
+    // dynamic fix 1
+    for (let i = 0; i < STATIC_UPGRADES.length; i++) {
+        if (player.gameProgress.staticUpgrades[i] === undefined) {
+            player.gameProgress.staticUpgrades[i] = {
+                bought: D(0)
+            }
+        }
+    }
+
     if (player.version < 0) {
         player.version = 0;
     }

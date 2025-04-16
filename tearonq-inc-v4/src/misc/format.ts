@@ -3,11 +3,11 @@ import { D } from "./calc";
 import { player } from "../loadSave";
 
 const abbSuffixes: Array<Array<string>> = [
-    ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No"],
-    ["", "Dc", "Vg", "Tg", "Qe", "Qt", "Se", "St", "Og", "Nn"],
-    ["", "U", "D", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No"],
-    ["", "Ce", "UC", "DC", "TC", "qC", "QC", "sC", "SC", "OC", "NC"],
-    ["", "Mi", "Mc", 'undefined x3', 'undefined x4', 'undefined x5', 'undefined x6', 'undefined x7', 'undefined x8', 'undefined x9', 'undefined x10']
+    ["", "K",  "M",  "B",  "T",  "Qa", "Qi", "Sx", "Sp", "Oc", "No"],
+    ["", "Dc", "Vg", "Tg", "Qe", "Qt", "Se", "St", "Og", "Ng"],
+    ["", "U",  "D",  "T",  "Qa", "Qi", "Sx", "Sp", "Oc", "No"],
+    ["", "Ce", "Dn", "Tn", "qn", "Qn", "sn", "Sn", "On", "Nn"],
+    ["", "Mi", "Mc", "undefined x3", "undefined x4", "undefined x5", "undefined x6", "undefined x7", "undefined x8", "undefined x9", "undefined x10"]
 ]
 const letter: Array<string> = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 
@@ -74,10 +74,11 @@ function formatStandard(number: DecimalSource, aboveE33 = false): string {
 }
 
 export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = player.settings.notation.notationType, mixedToggle = true): string => {
-    if (Decimal.lt(number, 0)) return `-${format(Decimal.negate(number), dec, expdec)}`;
-    if (Decimal.eq(number, 0)) return (0).toFixed(dec);
-    if (Decimal.isNaN(number)) return "NaN";
-    if (!Decimal.isFinite(number)) return "Infinity";
+    if (number === undefined) { return `undefined` }
+    if (Decimal.lt(number, 0)) { return `-${format(Decimal.negate(number), dec, expdec)}`; }
+    if (Decimal.eq(number, 0)) { return (0).toFixed(dec); }
+    if (Decimal.isNaN(number)) { return "NaN"; }
+    if (!Decimal.isFinite(number)) { return "Infinity"; }
     try {
         if (notation !== 4 && player.settings.notation.mixed && mixedToggle && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
             if (Decimal.gte(number, Decimal.pow10(player.settings.notation.notationLimit)) && Decimal.lt(number, Decimal.pow10(player.settings.notation.mixedLimit))) {

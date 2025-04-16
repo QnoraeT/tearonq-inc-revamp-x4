@@ -264,7 +264,7 @@
                             <button id="praiResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; height: 225px">
                                 <h3>PRai: <span id="praiAmount"></span></h3>
                                 Reset your progress to gain <span id="praiGain"></span> PRai.<br>
-                                <span id="praiReq">Gain at least <span id="praiReqAmt"></span> more points to do a PRai reset.<br></span>
+                                <span id="praiReq">Gain at least <span id="praiReqAmt"></span> points to do a PRai reset.<br></span>
                                 <span id="praiDesc"></span><br>
                                 <br>You have <span id="praiAmt2"></span> PRai, which boosts your points by <span id="praiEffect"></span>&times;.
                                 <br>Resetting now will boost your points by <span id="praiBoostEffect"></span>&times;
@@ -281,49 +281,49 @@
                     </div>
                 </div>
                 <div id="upgrades" class="flex-vertical">
-                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt3"></span></b> PRai.</span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt3"></span></b> PRai. (+<b><span id="praiAmtGain3"></span></b>)</span>
                     <div id='upgradeList' class="flex-horizontal" style="flex-wrap: wrap; width: 1200px; margin: auto"></div>
                 </div>
                 <div id="kuaraniai" class="flex-vertical">
-                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt4"></span></b> PRai.</span>
-                    <div class="flex-vertical" style="background-color: #80008080; width: 1200px;">
-                        <div class="flex-horizontal kuaraniaiBorder" style="padding: 4px; width: 1196px;">
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt4"></span></b> PRai. (+<b><span id="praiAmtGain4"></span></b>)</span>
+                    <div id="kuaReset" class="flex-vertical" style="margin-bottom: 8px">
+                        <button id="kuaResetButton" class="whiteText fontTrebuchetMS kuaraniaiBGColor" style="width: 800px; padding: 0px; padding-bottom: 4px;">
+                            <h3>Kuaraniai: <span id="kuaAmount"></span></h3>
+                            Reset your progress to gain <span id="kuaGain"></span> Kuaraniai.<br>
+                            <span id="kuaReq">Gain at least <span id="kuaReqAmt"></span> PRai to do a Kuaraniai reset.<br></span>
+                            <span id="kuaDesc"></span><br>
+                            <br>You have <span id="kuaAmt2"></span> Kuaraniai, which generates <span id="kuaEffect"></span> Kua. Shards per second.
+                            <br>Resetting now will boost Kua. Shard generation by <span id="kuaBoostEffect"></span>&times;
+                        </button>
+                    </div>
+                    <div class="flex-vertical kuaraniaiBGColor" style="width: 1200px;">
+                        <div class="flex-horizontal kuaraniaiBorder" style="width: 1196px;">
                             <div class="flex-vertical">
-                                <span class="whiteText fontTrebuchetMS" style="font-size: 16px; margin-bottom: 8px;">You have <span id="kshardAmount"></span> Kua. Shards. (<span id="kshardGeneration"></span>/s)</span>
-                                <div class="flex-horizontal">
-                                    <div id="kshardStaticUpg" class="flex-horizontal" style="flex-wrap: wrap;">
-                                        <!-- <button id="kshardStaticUpg${id}" class="whiteText fontTrebuchetMS kuaUpgradeButton" style="width: 200px; height: 200px; font-size: 12px;">
-                                            <h3>Kua. Shard. Static Upgrade #`${id + 1}`</h3><br>
-                                            <span id="`kshardSU${id}Effects`"></span><br>
-                                            Cost: <span id="`kshardSU${id}Cost`"></span> Kua. S.<br>
-                                        </button> -->
-                                    </div>
-                                    <div id="kshardDynamicUpg" class="flex-horizontal">
+                                <span class="whiteText fontTrebuchetMS" style="font-size: 16px; margin-top: 4px; margin-bottom: 8px;">You have <span id="kshardAmount"></span> Kua. Shards. (<span id="kshardGeneration"></span>/s)</span>
+                                <div class="flex-horizontal" style="margin-bottom: 4px">
+                                    <div id="kshardStaticUpg" class="flex-horizontal" style="flex-wrap: wrap;"></div>
+                                    <div id="kshardDynamicUpg" class="flex-vertical">
+                                        <span class="whiteText fontTrebuchetMS" style="font-size: 12px; margin-bottom: 4px;">Hold shift on the buttons to examine what boosts you've recieved in total.</span>
                                         <button id="kshardDynamicUpgButton" class="whiteText fontTrebuchetMS kuaUpgradeButton" style="width: 550px; font-size: 14px">
-                                            <h3>Kua. S. Dynamic Upgrade: <span id="kshardDUAmount"></span></h3><br>
+                                            <h3>Kua. S. Dynamic Upgrade: <span id="kshardDUAmount"></span></h3>
                                             Cost: <span id="kshardDUCost"></span> Kua. S.<br>
-                                            <span id="kshardDUEffects"></span>
+                                            <span id="kshardDUEffects"></span><br>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-horizontal kuaraniaiBorder" style="margin-top: -4px; padding: 4px; width: 1196px;">
+                        <div class="flex-horizontal kuaraniaiBorder" style="margin-top: -4px; width: 1196px;">
                             <div class="flex-vertical">
-                                <span class="whiteText fontTrebuchetMS" style="font-size: 16px; margin-bottom: 8px;">You have <span id="kpowerAmount"></span> Kua. Power. (<span id="kpowerGeneration"></span>/s)<br></span>
-                                <div class="flex-horizontal">
-                                    <div id="kpowerStaticUpg" class="flex-horizontal" style="flex-wrap: wrap;">
-                                        <!-- <button id="kpowerStaticUpg${id}" class="whiteText fontTrebuchetMS kuaUpgradeButton" style="width: 200px; height: 200px; font-size: 12px;">
-                                            <h3>Kua. Shard. Static Upgrade #`${id + 1}`</h3><br>
-                                            <span id="`kpowerSU${id}Effects`"></span><br>
-                                            Cost: <span id="`kpowerSU${id}Cost`"></span> Kua. P.<br>
-                                        </button> -->
-                                    </div>
-                                    <div id="kpowerDynamicUpg" class="flex-horizontal">
+                                <span class="whiteText fontTrebuchetMS" style="font-size: 16px; margin-top: 4px; margin-bottom: 8px;">You have <span id="kpowerAmount"></span> Kua. Power. (<span id="kpowerGeneration"></span>/s)<br></span>
+                                <div class="flex-horizontal" style="margin-bottom: 4px">
+                                    <div id="kpowerStaticUpg" class="flex-horizontal" style="flex-wrap: wrap;"></div>
+                                    <div id="kpowerDynamicUpg" class="flex-vertical">
+                                        <span class="whiteText fontTrebuchetMS" style="font-size: 12px; margin-bottom: 4px;">Hold shift on the buttons to examine what boosts you've recieved in total.</span>
                                         <button id="kpowerDynamicUpgButton" class="whiteText fontTrebuchetMS kuaUpgradeButton" style="width: 550px; font-size: 14px">
-                                            <h3>Kua. P. Dynamic Upgrade: <span id="kpowerDUAmount"></span></h3><br>
+                                            <h3>Kua. P. Dynamic Upgrade: <span id="kpowerDUAmount"></span></h3>
                                             Cost: <span id="kpowerDUCost"></span> Kua. P.<br>
-                                            <span id="kpowerDUEffects"></span>
+                                            <span id="kpowerDUEffects"></span><br>
                                         </button>
                                     </div>
                                 </div>

@@ -65,6 +65,7 @@ export const STATIC_UPGRADES = [
 
 export const initHTML_StaticUpgrades = () => {
     toHTMLvar('praiAmt3');
+    toHTMLvar('praiAmtGain3');
     toHTMLvar('upgradeList');
 
     let txt = ``;
@@ -138,7 +139,8 @@ export const updateHTML_StaticUpgrades = () => {
     html['upgradeTabButton'].classList.toggle("hide", Decimal.lt(player.gameProgress.pr2, 4));
     html['upgrades'].classList.toggle("hide", tab.mainTab !== 4);
     if (tab.mainTab === 4) {
-        html['praiAmt3'].textContent = `${format(player.gameProgress.prai)}`
+        html['praiAmt3'].textContent = `${format(player.gameProgress.prai)}`;
+        html['praiAmtGain3'].textContent = `${format(tmp.game.praiGain)}`;
         for (let i = 0; i < STATIC_UPGRADES.length; i++) {
             html[`upgrade${i}`].classList.toggle("hide", !tmp.game.staticUpgrades[i].unlocked);
             if (tmp.game.staticUpgrades[i].unlocked) {

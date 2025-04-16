@@ -143,6 +143,8 @@ function initTemp(): Temp {
             kuaReq: D(0),
             kuaGain: D(0),
             kuaNext: D(0),
+            kuaEffect: D(0),
+            kuaNextEffect: D(0),
             ksGain: D(0),
             kpGain: D(0),
             kpupgEffs: kuaPowerUpgEffs,
@@ -171,7 +173,6 @@ function loadGame(): void {
     if (localStorage.getItem(saveID) !== null && localStorage.getItem(saveID) !== "null") {
         try {
             game = JSON.parse(decompressSave(localStorage.getItem(saveID)!));
-            player = updatePlayerData(game.list[game.currentSave].data);
         } catch (e) {
             console.error(`loading the game went wrong!`);
             console.error(e);
@@ -180,6 +181,8 @@ function loadGame(): void {
             spawnPopup(0, `Failed to load your save file! Automatic saving has been disabled! Please wait while @TearonQ fixes this! See errors in console!`, `Failed to load save`, Infinity, `#FF0000`)
         }
     }
+
+    player = updatePlayerData(game.list[game.currentSave].data);
 
     // initTmp part 2, account for save switching
     initHTML();
@@ -284,7 +287,7 @@ export const initGameBeforeSave = (): Game => {
 
     return {
         currentSave: 0,
-        autoSaveInterval: 5,
+        autoSaveInterval: 30,
         list: [
             {
                 name: "Save File",
