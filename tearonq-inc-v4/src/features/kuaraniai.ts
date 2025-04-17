@@ -4,6 +4,7 @@ import { player, tmp } from "../loadSave";
 import { format, formatTime } from "../misc/format";
 import { D, inverseFact, invHarmonicSum, sumHarmonicSeries } from "../misc/calc";
 import { EffectCache } from "../misc/effectCache";
+import { pr2Reset, updateGame_PR2 } from "./pr2";
 
 export type KuaUpgradeAllTypes = 0 | 1 | 2
 export type KuaUpgradeAllNames = 'shard' | 'power' | 'kua'
@@ -482,6 +483,8 @@ export const intiHTML_Kuaraniai = () => {
         toHTMLvar(`kshardStaticUpg${i}`);
         toHTMLvar(`kshardSU${i}Effects`);
         toHTMLvar(`kshardSU${i}Cost`);
+
+        html[`kshardStaticUpg${i}`].addEventListener('click', () => buyKuaUpgrade('shard', i));
     }
 
     txt = ``
@@ -500,10 +503,16 @@ export const intiHTML_Kuaraniai = () => {
         toHTMLvar(`kpowerStaticUpg${i}`);
         toHTMLvar(`kpowerSU${i}Effects`);
         toHTMLvar(`kpowerSU${i}Cost`);
+
+        html[`kpowerStaticUpg${i}`].addEventListener('click', () => buyKuaUpgrade('power', i));
     }
 
     kuaDynamicUpgEffDisplay('shard', false);
     kuaDynamicUpgEffDisplay('power', false);
+
+    html['kuaResetButton'].addEventListener('click', () => kuaReset(false));
+    html['kshardDynamicUpgButton'].addEventListener('click', () => buyKuaDynamicShard());
+    html['kpowerDynamicUpgButton'].addEventListener('click', () => buyKuaDynamicPower());
 }
 
 export const updateGame_Kuaraniai = (delta: Decimal) => {
@@ -525,8 +534,8 @@ export const updateGame_Kuaraniai = (delta: Decimal) => {
     }
 
     tmp.game.kuaReq = D(1e20);
-    tmp.game.kuaGain = sumHarmonicSeries(Decimal.add(player.gameProgress.prai, tmp.game.praiGain).max(tmp.game.kuaReq.div(10)).log(tmp.game.kuaReq)).sub(1.5).mul(2).pow_base(1000);
-    tmp.game.kuaNext = invHarmonicSum(tmp.game.kuaGain.mul(1000).add(1).floor().div(1000).log(1000).div(2).add(1.5)).pow_base(tmp.game.kuaReq).sub(tmp.game.praiGain);
+    tmp.game.kuaGain = sumHarmonicSeries(Decimal.add(player.gameProgress.prai, tmp.game.praiGain).max(tmp.game.kuaReq.div(10)).log(tmp.game.kuaReq)).sub(1.5).mul(2).pow_base(1000).mul(1000).floor().div(1000);
+    tmp.game.kuaNext = invHarmonicSum(tmp.game.kuaGain.mul(1000).add(1).floor().div(1000).log(1000).div(2).add(1.5)).pow_base(tmp.game.kuaReq).sub(player.gameProgress.prai).sub(tmp.game.praiGain);
 
     tmp.game.kuaEffect = D(player.gameProgress.kua)
     tmp.game.kuaNextEffect = D(player.gameProgress.kua)
@@ -621,6 +630,18 @@ export const updateHTML_Kuaraniai = () => {
         html[`kpowerDUAmount`].textContent = `${format(player.gameProgress.kuaDynamicUpgs[1])}`;
         html[`kpowerDUCost`].textContent = `${format(tmp.game.kpDynamicCost)}`;
     }
+}
+
+export const kuaReset = (override: boolean) => {
+    if (!override) {
+        if (Decimal.lt(player.gameProgress.prai, tmp.game.kuaReq)) {
+            return;
+        }
+        player.gameProgress.kua = Decimal.add(player.gameProgress.kua, tmp.game.kuaGain);
+    }
+
+    updateGame_PR2(D(0));
+    pr2Reset(true);
 }
 
 export const kuaUpgradeOpacity = (type: 0 | 1 | 2, id: number) => {

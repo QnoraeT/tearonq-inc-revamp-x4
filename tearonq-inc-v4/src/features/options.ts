@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
 import { html, switchOptionSaveTab, switchOptionTab, tab, toHTMLvar } from "../main";
-import { deleteSave, displayModes, duplicateSave, exportSave, exportSaveList, game, gameVars, importSave, importSaveList, importSFIntoNew, player, renameSave, resetTheWholeGame, saveTheFrickingGame, setAutosaveInterval, switchToSave } from "../loadSave";
-import { D, gRC } from "../misc/calc";
+import { deleteSave, displayModes, duplicateSave, exportSave, exportSaveList, game, importSave, importSaveList, importSFIntoNew, player, renameSave, resetTheWholeGame, saveTheFrickingGame, setAutosaveInterval, switchToSave } from "../loadSave";
+import { D } from "../misc/calc";
 import { format, formatTime } from "../misc/format";
 
 export const NOTATION_LIST = ["Scientific", "Engineering", "Logarithm", "Logarithm Delayed", "Letters", "Infinity"];
@@ -30,6 +30,7 @@ export const intiHTML_Options = () => {
     toHTMLvar('notationList');
     toHTMLvar('autoSaveInterval');
 
+    // ! see loadSave.ts in the initHTML function
     html['options-notesTabButton'].addEventListener('click', () => switchOptionTab(0));
     html['options-linksTabButton'].addEventListener('click', () => switchOptionTab(1));
     html['options-savingTabButton'].addEventListener('click', () => switchOptionTab(2));
@@ -45,8 +46,10 @@ export const intiHTML_Options = () => {
     html['importSaveFileButton'].addEventListener('click', () => importSFIntoNew());
     html['deleteSaveListButton'].addEventListener('click', () => resetTheWholeGame(true));
     html['timeSpeedSetCheatButton'].addEventListener('click', () => setTimeSpeed());
+
+
     (html['notationLimitSlider'] as HTMLInputElement).value = `${player.settings.notation.notationLimit}`;
-    (html['notationList'] as HTMLInputElement).value = `${player.settings.notation.notationType}`
+    (html['notationList'] as HTMLInputElement).value = `${player.settings.notation.notationType}`;
 
     updateSaveFileListHTML();
 }
@@ -95,11 +98,11 @@ export const updateSaveFileListHTML = () => {
     let txt = ``
     for (let i = 0; i < game.list.length; i++) {
         txt += `
-            <div id="saveFile${i}" class="${game.currentSave === i ? '' : 'rainbowBorder'}" style="position: relative; min-height: 19%; height: 19%; width: 98%; margin-top: 1%;${game.currentSave === i ? ' border: 2px solid #788088;' : ''} "> 
+            <div id="saveFile${i}" ${game.currentSave === i ? 'class="rainbowBorder"' : ''} style="position: relative; min-height: 19%; height: 19%; width: 98%; margin-top: 1%;${game.currentSave !== i ? ' border: 2px solid #788088;' : ''}"> 
                 <div style="height: 100%; width: 100%">
                     <div style="height: 100%; width: 100%; position: relative">
-                        <div id="saveFile${i}progBase" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;"></div>
-                        <div id="saveFile${i}progFill" style="position: absolute; top: 0; left: 0; height: 100%;"></div>
+                        <div id="saveFile${i}progBase" ${game.currentSave === i ? 'class="rainbowDarkBarBase"' : ''} style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;${game.currentSave !== i ? ' background-color:rgb(46, 50, 53);' : ''}"></div>
+                        <div id="saveFile${i}progFill" ${game.currentSave === i ? 'class="rainbowDarkBarFill"' : ''} style="position: absolute; top: 0; left: 0; height: 100%;${game.currentSave !== i ? ' background-color:rgb(65, 69, 73);' : ''}"></div>
                     </div>
                     <div style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;">
                         <div style="margin: 4px; margin-top: 2px">

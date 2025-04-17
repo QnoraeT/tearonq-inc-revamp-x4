@@ -4,7 +4,7 @@ import { spawnPopup } from "./misc/popups";
 import { updatePlayerData } from './versionControl';
 import { D } from './misc/calc';
 import { initHTML_Main, MAIN_UPG_DATA as MAIN_BUYABLE_DATA } from './features/mainBuyables';
-import { gameLoop, html, switchMainTab, toHTMLvar } from './main';
+import { gameLoop, html, switchMainTab, toHTMLvar, updateHTML } from './main';
 import { initHTML_PRai } from './features/prai';
 import { initHTML_PR2 } from './features/pr2';
 import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
@@ -197,12 +197,15 @@ function loadGame(): void {
 
 export const setGameLoopInterval = () => {
     gameTick = setInterval(gameLoop, 16.7);
+    console.log(`gameLoop interval ${gameTick} created!`)
 }
 
 export const redoLoadingGame = () => {
     clearInterval(gameTick);
+    console.log(`gameLoop interval ${gameTick} cleared!`)
     tmp.gameIsRunning = false;
-    setTimeout(loadGame, 100);
+    updateHTML();
+    setTimeout(loadGame, 1000);
 }
 
 export const initHTML = () => {
@@ -248,12 +251,18 @@ export const initHTML = () => {
     html['gameLoading'].style.display = 'none';
     html['offlineTime'].style.display = 'none';
 
+    // ! toHTMLvar will not replace the reference! check if an event doesn't exist, then do it, because other wise you are going to duplicate every action the user makes!
+    // ! calling redoLoadingGame will cause this to run again and make a new event listener! normally this wouldn't be an issue but prompts will duplicate causing
+    // ! garbage to happen!
+    // ! ALWAYS CHECK IF AN ONCLICK DOESN'T EXIST FIRST!
+
     html['buyableTabButton'].addEventListener('click', () => switchMainTab(0));
     html['optionTabButton'].addEventListener('click', () => switchMainTab(1));
     html['statTabButton'].addEventListener('click', () => switchMainTab(2));
     html['achievementTabButton'].addEventListener('click', () => switchMainTab(3));
     html['upgradeTabButton'].addEventListener('click', () => switchMainTab(4));
     html['kuaraniaiTabButton'].addEventListener('click', () => switchMainTab(5)); 
+
 
     intiHTML_Kuaraniai();
     initHTML_StaticUpgrades();
@@ -421,6 +430,7 @@ export const saveTheFrickingGame = (clicked = false): void => {
 };
 
 export const resetTheWholeGame = (prompt: boolean): void => {
+    console.log('reset whole game called!')
     if (prompt) {
         if (!confirm("Are you sure you want to delete EVERY save?")) {
             return;
@@ -434,6 +444,7 @@ export const resetTheWholeGame = (prompt: boolean): void => {
     initPlayer(true);
     saveTheFrickingGame();
     redoLoadingGame();
+    throw new Error('who tf is calling me?')
 };
 
 export const resetThisSave = (prompt: boolean): void => {

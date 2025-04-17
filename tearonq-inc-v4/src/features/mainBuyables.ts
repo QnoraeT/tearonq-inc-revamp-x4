@@ -208,6 +208,7 @@ export const updateHTML_Main = () => {
                 html[`buyable${i}EffectPer`].textContent = `${MAIN_UPG_DATA[i].desc1}${format(tmp.game.buyables[i].effectBase, 3)}${MAIN_UPG_DATA[i].desc2}`;
                 html[`buyable${i}TotalEffect`].textContent = `${MAIN_UPG_DATA[i].desc1}${format(tmp.game.buyables[i].effect, 2)}${MAIN_UPG_DATA[i].desc2}`;
                 html[`buyable${i}Button`].classList.toggle("cannot", !tmp.game.buyables[i].canBuy);
+                html[`buyable${i}Button`].classList.toggle("complete", Decimal.gte(player.gameProgress.buyables[i].bought, tmp.game.buyableCap));
                 html[`buyable${i}Button`].classList.toggle("can", tmp.game.buyables[i].canBuy);
                 html[`buyable${i}Button`].classList.toggle("cannotClick", !tmp.game.buyables[i].canBuy);
                 html[`buyable${i}Button`].classList.toggle("canClick", tmp.game.buyables[i].canBuy);

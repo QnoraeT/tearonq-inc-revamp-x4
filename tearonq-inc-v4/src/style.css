@@ -12,6 +12,26 @@ body {
     100% { border: 2px solid #f00; }
 }
 
+@keyframes rainbowDarkBarBase {
+    0%   { background-color: #200; }
+    20%  { background-color: #220; }
+    30%  { background-color: #020; }
+    40%  { background-color: #022; }
+    60%  { background-color: #002; }
+    80%  { background-color: #202; }
+    100% { background-color: #200; }
+}
+
+@keyframes rainbowDarkBarFill {
+    0%   { background-color: #400; }
+    20%  { background-color: #440; }
+    30%  { background-color: #040; }
+    40%  { background-color: #044; }
+    60%  { background-color: #004; }
+    80%  { background-color: #404; }
+    100% { background-color: #400; }
+}
+
 @keyframes kuaraniaiBorder {
     0%   { border: 4px solid #40f; }
     50%  { border: 4px solid #c0c; }
@@ -32,6 +52,20 @@ body {
 
 .rainbowBorder {
     animation-name: rainbowBorder;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.rainbowDarkBarBase {
+    animation-name: rainbowDarkBarBase;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.rainbowDarkBarFill {
+    animation-name: rainbowDarkBarFill;
     animation-duration: 8s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;

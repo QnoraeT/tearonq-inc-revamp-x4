@@ -58,10 +58,17 @@ export const updateHTML_PRai = () => {
         }
         if (Decimal.lt(player.gameProgress.totalPointsInPRai, tmp.game.praiReq)) {
             html['praiDesc'].textContent = `You can PRai reset in ${formatTime(tmp.game.praiReq.sub(player.gameProgress.totalPointsInPRai).div(tmp.game.pointGen))}.`;
-        } else if (tmp.game.praiGain.lt(100) || Decimal.lt(player.gameProgress.prai, 100)) {
-            html['praiDesc'].textContent = `Next in ${format(tmp.game.praiNext)} points. (${format(tmp.game.praiGain.div(player.gameProgress.timeInPRai), 2)}/s)`;
         } else {
-            html['praiDesc'].textContent = `Next OoM in ${format(tmp.game.praiNext)} points. (${format(tmp.game.praiGain.add(player.gameProgress.prai).div(player.gameProgress.prai).log10().div(player.gameProgress.timeInPRai), 3)} OoM/s)`;
+            if (tmp.game.praiGain.lt(100) || Decimal.lt(player.gameProgress.prai, 100)) {
+                html['praiDesc'].textContent = `Next in ${format(tmp.game.praiNext)} points.`;
+            } else {
+                html['praiDesc'].textContent = `Next OoM in ${format(tmp.game.praiNext)} points.`;
+            }
+            if (Decimal.gt(player.gameProgress.prai, tmp.game.praiGain)) {
+                html['praiDesc'].textContent += `(${format(tmp.game.praiGain.div(player.gameProgress.timeInPRai), 2)}/s)`;
+            } else {
+                html['praiDesc'].textContent += `(${format(tmp.game.praiGain.add(player.gameProgress.prai).div(player.gameProgress.prai).log10().div(player.gameProgress.timeInPRai), 3)} OoM/s)`;
+            }
         }
         html['praiEffect'].textContent = `${format(tmp.game.praiEffect, 2)}`;
         html['praiBoostEffect'].textContent = `${format(tmp.game.praiNextEffect.div(tmp.game.praiEffect), 2)}`;

@@ -9,7 +9,7 @@ import { updateGame_PRai, updateHTML_PRai } from './features/prai';
 import { updateGame_PR2, updateHTML_PR2 } from './features/pr2';
 import { updateGame_StaticUpgrades, updateHTML_StaticUpgrades } from './features/staticUpgrades';
 import { kuaDynamicUpgEffDisplay, updateGame_Kuaraniai, updateHTML_Kuaraniai } from './features/kuaraniai';
-import { updateGame_Options, updateHTML_Options } from './features/options';
+import { updateGame_Options, updateHTML_Options, updateSaveFileListHTML } from './features/options';
 
 export const html: Record<string, HTMLElement> = {};
 export const toHTMLvar = (id: string) => {
@@ -73,6 +73,7 @@ export const gameLoop = () => {
                 tmp.offlineTime.tickRemaining = tmp.offlineTime.tickMax;
                 doOfflineTime();
                 clearInterval(gameTick);
+                console.log(`gameLoop interval ${gameTick} cleared!`)
                 return;
             }
             if (gameVars.delta > 0) {
@@ -152,8 +153,8 @@ export const updateHTML = () => {
         html[`popupID${i}`].style.opacity = `${popupList[i].opacity}`
     }
 
-    html['pointCounter'].textContent = `${format(player.gameProgress.points)}`;
-    html['ppsCounter'].textContent = `${format(tmp.game.pointGen)}`;
+    html['pointCounter'].textContent = `${tmp.gameIsRunning ? format(player.gameProgress.points) : 'Loading!'}`;
+    html['ppsCounter'].textContent = `${tmp.gameIsRunning ? format(tmp.game.pointGen) : 'Please wait!'}`;
     html['timeSinceSave'].textContent = `${formatTime(gameVars.sessionTime - gameVars.lastSave)} / ${formatTime(game.autoSaveInterval)}`;
     updateHTML_Main();
     updateHTML_PRai();
@@ -180,7 +181,7 @@ document.onkeyup = function (e) {
     shiftDown = e.shiftKey;
     ctrlDown = e.ctrlKey;
 
-    if (shiftDown) {
+    if (!shiftDown) {
         kuaDynamicUpgEffDisplay('shard', false)
         kuaDynamicUpgEffDisplay('power', false)
     }
@@ -196,4 +197,7 @@ export const switchOptionTab = (id: number) => {
 
 export const switchOptionSaveTab = (id: number) => {
     tab.optionsSaveTab = id;
+    if (tab.optionsSaveTab === 0) {
+        updateSaveFileListHTML();
+    }
 }
