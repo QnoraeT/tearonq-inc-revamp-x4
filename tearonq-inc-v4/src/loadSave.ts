@@ -3,31 +3,17 @@ import { Game, GameVars, Player, Temp } from "./variableTypes";
 import { spawnPopup } from "./misc/popups";
 import { updatePlayerData } from './versionControl';
 import { D } from './misc/calc';
-import { initHTML_Main, MAIN_UPG_DATA as MAIN_BUYABLE_DATA } from './features/mainBuyables';
+import { initHTML_Main, MAIN_BUYABLE_DATA as MAIN_BUYABLE_DATA } from './features/mainBuyables';
 import { gameLoop, html, switchMainTab, toHTMLvar, updateHTML } from './main';
 import { initHTML_PRai } from './features/prai';
-import { initHTML_PR2 } from './features/pr2';
+import { initHTML_PR2 } from './features/pr2+';
 import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
 import { intiHTML_Kuaraniai, KUA_DYNAMICS, KUA_UPGRADES } from './features/kuaraniai';
 import { intiHTML_Options, updateSaveFileListHTML } from './features/options';
+import { initHTML_Extract, PRESTIGE_EXTRACT_BUYABLES } from './features/extract';
+import { initHTML_Colosseum } from './features/colosseum';
 
 export const initPlayer = (set = false): Player => {
-    const mainBuyables = [];
-    for (let i = 0; i < MAIN_BUYABLE_DATA.length; i++) {
-        mainBuyables.push({
-            bought: D(0),
-            boughtInKua: D(0),
-            accumulated: D(0),
-            autobought: D(0),
-            auto: false
-        });
-    }
-    const staticUpgrades = [];
-    for (let i = 0; i < STATIC_UPGRADES.length; i++) {
-        staticUpgrades.push({
-            bought: D(0)
-        });
-    }
     const data = {
         lastUpdated: Date.now(),
         lastUpdated2: Date.now(),
@@ -46,15 +32,20 @@ export const initPlayer = (set = false): Player => {
         gameProgress: {
             points: D(0),
             totalPointsInPRai: D(0),
-            buyables: mainBuyables,
+            totalPointsInCol: D(0),
+            buyables: [],
             staticUpgrades: [],
             prai: D(0),
             praiAuto: false,
             timeInPRai: D(0),
-            prestigeEssence: D(0),
+            prestigeExtract: D(0),
+            pEBuyables: [],
             pr2: D(0),
             pr2Auto: false,
             timeInPR2: D(0),
+            pr3: D(0),
+            pr3Auto: false,
+            timeInPR3: D(0),
             kua: D(0),
             kuaAuto: false,
             timeInKua: D(0),
@@ -64,6 +55,7 @@ export const initPlayer = (set = false): Player => {
             kuaDynamicUpgs: [D(0), D(0), D(0)],
             colPower: D(0),
             colCompleted: [],
+            colDifficulty: [],
             colChallenge: null,
             timeInCol: D(0),
         }
@@ -79,11 +71,14 @@ function initTemp(): Temp {
     for (let i = 0; i < MAIN_BUYABLE_DATA.length; i++) {
         buyables.push({
             cost: D(1),
+            scalingSpeed: D(1),
             target: D(0),
-            effect: D(0),
-            effectBase: D(0),
+            eff: D(0),
+            effBase: D(0),
             unlocked: false,
             autoUnlocked: false,
+            autoBought: D(0),
+            autoSpeed: D(0),
             canBuy: false
         })
     }
@@ -92,7 +87,7 @@ function initTemp(): Temp {
         staticUpgrades.push({
             cost: D(1),
             target: D(0),
-            effect: D(0),
+            eff: D(0),
             unlocked: false,
             canBuy: false
         })
@@ -113,6 +108,15 @@ function initTemp(): Temp {
     for (let i = 0; i < KUA_DYNAMICS.power.length; i++) {
         kuaPowerDynamicEffs.push(D(0));
     }
+    const prestigeExtractBuyables = [];
+    for (let i = 0; i < PRESTIGE_EXTRACT_BUYABLES.length; i++) {
+        prestigeExtractBuyables.push({
+            eff1: D(0),
+            eff2: D(0),
+            nextEff1: D(0),
+            nextEff2: D(0)
+        })
+    }
     const obj: Temp = {
         gameTimeSpeed: D(1),
         inputSaveList: 'Input your save list here!',
@@ -130,31 +134,52 @@ function initTemp(): Temp {
             pointGen: D(0),
             buyableCap: D(100),
             buyables: buyables,
-            praiReq: D(0),
-            praiGain: D(0),
-            praiExp: D(0),
-            praiNext: D(0),
-            praiEffect: D(0),
-            praiNextEffect: D(0),
+            prai: {
+                req: D(0),
+                gain: D(0),
+                exp: D(0),
+                next: D(0),
+                eff: D(0),
+                nextEff: D(0),
+            },
             pr2Req: D(0),
-            pr2Effect: D(0),
-            staticUpgradeCap: D(1),
-            staticUpgrades: staticUpgrades,
-            kuaReq: D(0),
-            kuaGain: D(0),
-            kuaNext: D(0),
-            kuaEffect: D(0),
-            kuaNextEffect: D(0),
-            ksGain: D(0),
-            kpGain: D(0),
-            kpupgEffs: kuaPowerUpgEffs,
-            kuupgEffs: kuaUpgEffs,
-            ksdynEffs: kuaShardDynamicEffs,
-            kpdynEffs: kuaPowerDynamicEffs,
-            ksDynamicCost: D(1),
-            kpDynamicCost: D(1),
-            ksDynamicTarget: D(0),
-            kpDynamicTarget: D(0)
+            pr3: {
+                req: D(0),
+                target: D(0),
+                eff: D(0),     
+            },
+            staticUpgCap: D(1),
+            staticUpgs: staticUpgrades,
+            kua: {
+                req: D(0),
+                gain: D(0),
+                upgEffs: kuaUpgEffs,
+                next: D(0),
+                eff: D(0),
+                nextEff: D(0),
+            },
+            ks: {
+                gain: D(0),
+                dynEffs: kuaShardDynamicEffs,
+                dynCost: D(1),
+                dynTarget: D(0)
+            },
+            kp: {
+                gain: D(0),
+                upgEffs: kuaPowerUpgEffs,
+                dynEffs: kuaPowerDynamicEffs,
+                dynCost: D(1),
+                dynTarget: D(0)
+            },
+            pEG: D(0),
+            pEGP: D(0), // prai only
+            pEGR: D(0), // after prai reset
+            pEGPR: D(0), // prai only after prai reset
+            pEEffect: D(0),
+            pEBuyables: prestigeExtractBuyables,
+            baseColGain: D(0),
+            trueColGain: D(0),
+            colMaxTime: D(0)
         }
     };
 
@@ -192,17 +217,16 @@ function loadGame(): void {
 
     tmp.gameIsRunning = true;
     setGameLoopInterval();
+    gameVars.gameLoadedFirst = true;
     return;
 }
 
 export const setGameLoopInterval = () => {
     gameTick = setInterval(gameLoop, 16.7);
-    console.log(`gameLoop interval ${gameTick} created!`)
 }
 
 export const redoLoadingGame = () => {
     clearInterval(gameTick);
-    console.log(`gameLoop interval ${gameTick} cleared!`)
     tmp.gameIsRunning = false;
     updateHTML();
     setTimeout(loadGame, 1000);
@@ -232,16 +256,22 @@ export const initHTML = () => {
     toHTMLvar('options-cheats');
     toHTMLvar('options-saving-saveList');
     toHTMLvar('options-saving-saveCreate');
+    toHTMLvar('disclaimer');
     toHTMLvar('buyables');
     toHTMLvar('upgrades');
     toHTMLvar('kuaraniai');
+    toHTMLvar('extract');
+    toHTMLvar('colosseum');
 
+    toHTMLvar('disclaimerTabButton');
     toHTMLvar('buyableTabButton');
     toHTMLvar('optionTabButton');
     toHTMLvar('statTabButton');
     toHTMLvar('achievementTabButton');
     toHTMLvar('upgradeTabButton');
     toHTMLvar('kuaraniaiTabButton');
+    toHTMLvar('extractTabButton');
+    toHTMLvar('colosseumTabButton');
 
     toHTMLvar('pointCounter');
     toHTMLvar('fpsCounter');
@@ -254,16 +284,21 @@ export const initHTML = () => {
     // ! toHTMLvar will not replace the reference! check if an event doesn't exist, then do it, because other wise you are going to duplicate every action the user makes!
     // ! calling redoLoadingGame will cause this to run again and make a new event listener! normally this wouldn't be an issue but prompts will duplicate causing
     // ! garbage to happen!
-    // ! ALWAYS CHECK IF AN ONCLICK DOESN'T EXIST FIRST!
 
-    html['buyableTabButton'].addEventListener('click', () => switchMainTab(0));
-    html['optionTabButton'].addEventListener('click', () => switchMainTab(1));
-    html['statTabButton'].addEventListener('click', () => switchMainTab(2));
-    html['achievementTabButton'].addEventListener('click', () => switchMainTab(3));
-    html['upgradeTabButton'].addEventListener('click', () => switchMainTab(4));
-    html['kuaraniaiTabButton'].addEventListener('click', () => switchMainTab(5)); 
+    if (!gameVars.gameLoadedFirst) {
+        html['disclaimerTabButton'].addEventListener('click', () => switchMainTab(-1));
+        html['buyableTabButton'].addEventListener('click', () => switchMainTab(0));
+        html['optionTabButton'].addEventListener('click', () => switchMainTab(1));
+        html['statTabButton'].addEventListener('click', () => switchMainTab(2));
+        html['achievementTabButton'].addEventListener('click', () => switchMainTab(3));
+        html['upgradeTabButton'].addEventListener('click', () => switchMainTab(4));
+        html['kuaraniaiTabButton'].addEventListener('click', () => switchMainTab(5));
+        html['extractTabButton'].addEventListener('click', () => switchMainTab(6));
+        html['colosseumTabButton'].addEventListener('click', () => switchMainTab(7));
+    }
 
-
+    initHTML_Colosseum();
+    initHTML_Extract();
     intiHTML_Kuaraniai();
     initHTML_StaticUpgrades();
     initHTML_PR2();
@@ -274,6 +309,7 @@ export const initHTML = () => {
 
 export const gameVars: GameVars = ({
     delta: 0,
+    gameLoadedFirst: false,
     trueDelta: 0,
     lastFPSCheck: 0,
     fpsList: [],

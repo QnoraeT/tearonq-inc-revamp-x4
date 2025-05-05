@@ -249,6 +249,8 @@ export const intRand = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+export const GAMMA = 0.5772156649015329;
+
 export const expQuadCostGrowth = (
     x: DecimalSource,
     a: DecimalSource,
@@ -404,6 +406,6 @@ export const linearAdd = (
 
 export const invHarmonicSum = (x: DecimalSource) => {
     return Decimal.gte(x, 1e7)
-        ? Decimal.sub(0.5772156649015329, x).exp().div(2).neg().lambertw().mul(2).recip().neg()
-        : Decimal.sub(x, 0.5772156649015329).mul(2).exp().mul(12).recip().neg().lambertw().mul(-3).sqrt().recip().sub(1).div(2)
+        ? Decimal.sub(GAMMA, x).exp().div(2).neg().lambertw().mul(2).recip().neg()
+        : Decimal.sub(x, GAMMA).mul(2).exp().mul(12).recip().neg().lambertw().mul(-3).sqrt().recip().sub(1).div(2)
 }

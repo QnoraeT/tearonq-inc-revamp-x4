@@ -82,7 +82,7 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
     try {
         if (notation !== 4 && player.settings.notation.mixed && mixedToggle && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
             if (Decimal.gte(number, Decimal.pow10(player.settings.notation.notationLimit)) && Decimal.lt(number, Decimal.pow10(player.settings.notation.mixedLimit))) {
-                const abb = Decimal.log10(number).mul(0.33333333336666665).floor();
+                const abb = Decimal.log10(number).mul(0.3333333336666665).floor();
                 return `${Decimal.div(number, abb.mul(3).pow10()).toNumber().toFixed(expdec)} ${formatStandard(number)}`;
             }
             return format(number, dec, expdec, notation, false);
@@ -91,13 +91,13 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
             case 0: // sci
                 if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).neg().pow10())) {
                     return `e${format(Decimal.log10(number), 0, expdec)}`;
-                } else if (Decimal.lt(number, 0.001)) {
-                    const exp = Decimal.log10(number).mul(1.00000000001).floor();
+                } else if (Decimal.lt(number, 0.1 ** dec * 0.499999999)) {
+                    const exp = Decimal.log10(number).floor();
                     return `${Decimal.div(number, exp.pow10()).toNumber().toFixed(expdec)}e${format(exp, 0, expdec)}`;
                 } else if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit))) {
                     return numberWithCommas(new Decimal(number).toNumber().toFixed(dec));
                 } else if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
-                    const exp = Decimal.log10(number).mul(1.00000000001).floor();
+                    const exp = Decimal.log10(number).mul(1.0000000001).floor();
                     return `${Decimal.div(number, exp.pow10()).toNumber().toFixed(expdec)}e${format(exp, 0, expdec)}`;
                 } else if (Decimal.lt(number, "10^^7")) {
                     return `e${format(Decimal.log10(number), dec, expdec)}`;
@@ -106,7 +106,7 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
                 }
             case 4:
                 if (Decimal.gte(number, 1e3) && Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).pow10())) {
-                    const abb = Decimal.log10(number).mul(0.33333333336666665).floor();
+                    const abb = Decimal.log10(number).mul(0.3333333336666665).floor();
                     return `${Decimal.div(number, abb.mul(3).pow10()).toNumber().toFixed(expdec)} ${formatLetter(abb.sub(1), "")}`;
                 }
                 return format(number, dec, expdec, 0);
@@ -122,7 +122,7 @@ export const format = (number: DecimalSource, dec = 0, expdec = 3, notation = pl
         if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit).neg().pow10())) {
             return `e${format(Decimal.log10(number), 0, expdec)}`;
         } else if (Decimal.lt(number, 0.001)) {
-            const exp = Decimal.log10(number).mul(1.00000000001).floor();
+            const exp = Decimal.log10(number).floor();
             return `${Decimal.div(number, exp.pow10()).toNumber().toFixed(expdec)}e${format(exp, 0, expdec)}`;
         } else if (Decimal.lt(number, Decimal.pow10(player.settings.notation.notationLimit))) {
             return numberWithCommas(new Decimal(number).toNumber().toFixed(dec));

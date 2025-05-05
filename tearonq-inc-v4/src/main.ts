@@ -6,10 +6,12 @@ import { format, formatTime } from './misc/format';
 import { updateGame_Main, updateHTML_Main } from './features/mainBuyables';
 import { drawing } from './canvas';
 import { updateGame_PRai, updateHTML_PRai } from './features/prai';
-import { updateGame_PR2, updateHTML_PR2 } from './features/pr2';
+import { updateGame_PR2, updateHTML_PR2 } from './features/pr2+';
 import { updateGame_StaticUpgrades, updateHTML_StaticUpgrades } from './features/staticUpgrades';
 import { kuaDynamicUpgEffDisplay, updateGame_Kuaraniai, updateHTML_Kuaraniai } from './features/kuaraniai';
 import { updateGame_Options, updateHTML_Options, updateSaveFileListHTML } from './features/options';
+import { updateGame_Extract, updateHTML_Extract } from './features/extract';
+import { updateGame_Colosseum, updateHTML_Colosseum } from './features/colosseum';
 
 export const html: Record<string, HTMLElement> = {};
 export const toHTMLvar = (id: string) => {
@@ -24,7 +26,8 @@ export const el = (id: string): HTMLElement | null => document.getElementById(id
 export const elIm = (id: string): HTMLImageElement => document.getElementById(id)! as HTMLImageElement;
 
 export const tab: Tab = ({
-    mainTab: 0,
+    mainTab: -1,
+    buyablesTab: 0,
     optionsTab: 0,
     optionsSaveTab: 0
 });
@@ -73,7 +76,6 @@ export const gameLoop = () => {
                 tmp.offlineTime.tickRemaining = tmp.offlineTime.tickMax;
                 doOfflineTime();
                 clearInterval(gameTick);
-                console.log(`gameLoop interval ${gameTick} cleared!`)
                 return;
             }
             if (gameVars.delta > 0) {
@@ -140,6 +142,8 @@ export const gameLoop = () => {
 }
 
 export const updateGame = (delta: Decimal) => {
+    updateGame_Colosseum(delta);
+    updateGame_Extract(delta);
     updateGame_Kuaraniai(delta);
     updateGame_StaticUpgrades(delta);
     updateGame_PR2(delta);
@@ -156,11 +160,14 @@ export const updateHTML = () => {
     html['pointCounter'].textContent = `${tmp.gameIsRunning ? format(player.gameProgress.points) : 'Loading!'}`;
     html['ppsCounter'].textContent = `${tmp.gameIsRunning ? format(tmp.game.pointGen) : 'Please wait!'}`;
     html['timeSinceSave'].textContent = `${formatTime(gameVars.sessionTime - gameVars.lastSave)} / ${formatTime(game.autoSaveInterval)}`;
+    html['disclaimer'].classList.toggle("hide", tab.mainTab !== -1);
     updateHTML_Main();
     updateHTML_PRai();
     updateHTML_PR2();
     updateHTML_StaticUpgrades();
     updateHTML_Kuaraniai();
+    updateHTML_Extract();
+    updateHTML_Colosseum();
     updateHTML_Options();
 }
 
@@ -172,8 +179,17 @@ document.onkeydown = function (e) {
     ctrlDown = e.ctrlKey;
 
     if (shiftDown) {
-        kuaDynamicUpgEffDisplay('shard', true)
-        kuaDynamicUpgEffDisplay('power', true)
+        html[`kshardDUEffects`].innerHTML = kuaDynamicUpgEffDisplay('shard', true)
+        html[`kpowerDUEffects`].innerHTML = kuaDynamicUpgEffDisplay('power', true)
+    }
+
+    if (ctrlDown) {
+        console.log(player)
+        console.log(tmp)
+        console.log(gameVars)
+
+        player.gameProgress.kuaDynamicUpgs[0] = Decimal.floor(tmp.game.ks.dynTarget).add(1)
+        player.gameProgress.kuaDynamicUpgs[1] = Decimal.floor(tmp.game.kp.dynTarget).add(1)
     }
 };
 
@@ -182,8 +198,8 @@ document.onkeyup = function (e) {
     ctrlDown = e.ctrlKey;
 
     if (!shiftDown) {
-        kuaDynamicUpgEffDisplay('shard', false)
-        kuaDynamicUpgEffDisplay('power', false)
+        html[`kshardDUEffects`].innerHTML = kuaDynamicUpgEffDisplay('shard', false)
+        html[`kpowerDUEffects`].innerHTML = kuaDynamicUpgEffDisplay('power', false)
     }
 };
 
@@ -191,8 +207,15 @@ export const switchMainTab = (id: number) => {
     tab.mainTab = id;
 }
 
+export const switchBuyableTab = (id: number) => {
+    tab.buyablesTab = id;
+}
+
 export const switchOptionTab = (id: number) => {
     tab.optionsTab = id;
+    if (tab.optionsTab === 2 && tab.optionsSaveTab === 0) {
+        updateSaveFileListHTML();
+    }
 }
 
 export const switchOptionSaveTab = (id: number) => {

@@ -40,14 +40,23 @@
                 </div>
                 <div id="tabs" style="margin-bottom: 10px">
                     <div class="flex-horizontal" style="flex-wrap: wrap;">
+                        <button id="disclaimerTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
+                            Disclaimer
+                        </button>
                         <button id="buyableTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Buyables
+                        </button>
+                        <button id="extractTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
+                            Extract
                         </button>
                         <button id="upgradeTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Upgrades
                         </button>
                         <button id="kuaraniaiTabButton" class="fontTrebuchetMS canClick tabButton kuaTabButton">
                             Kuaraniai
+                        </button>
+                        <button id="colosseumTabButton" class="fontTrebuchetMS canClick tabButton colTabButton">
+                            Colosseum
                         </button>
                         <button id="optionTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Options
@@ -60,10 +69,20 @@
                         </button>
                     </div>
                 </div>
+                <div id="disclaimer" class="flex-vertical">
+                    <span class="fontTrebuchetMS whiteText" style="text-align: center">
+                        <b style="font-size: 20px">You may find some weird or disagreeable things in this incremental!</b><br>
+                        This was a game mostly made for fun, and mostly for an incremental I wanted to make when I was bored.<br>
+                        <br>
+                        Genres: Abstract, Basic JS/HTML, Hybrid (Active/Idle)
+                        <br>
+                        Inspired by <span style="color: #a040ff">Jacorb</span>, <span style="color: #0c0">Hevipelle</span>, <span style="color: #c00">MrRedShark77</span>, and more!
+                    </span>
+                </div>
                 <div id="options" class="flex-vertical">
                     <div class="flex-horizontal" style="flex-wrap: wrap; margin-bottom: 10px">
                         <button id="options-notesTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
-                            Notes
+                            Information
                         </button>
                         <button id="options-linksTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Links
@@ -83,13 +102,7 @@
                     </div>
                     <div id="options-notes">
                         <div class="flex-horizontal">
-                            <span class="fontTrebuchetMS whiteText" style="text-align: center">
-                                <b style="font-size: 20px">You may find some weird or disagreeable things in this incremental!</b><br>
-                                This was a game mostly made for fun, and mostly for an incremental I wanted to make when I was bored.<br>
-                                Genres: Abstract, Basic JS/HTML, Hybrid (Active/Idle)
-                                <br>
-                                Inspired by <span style="color: #a040ff">Jacorb</span>, <span style="color: #0c0">Hevipelle</span>, <span style="color: #c00">MrRedShark77</span>, and more!
-                            </span>
+                            <!-- something here -->
                         </div>
                     </div>
                     <div id="options-links">
@@ -247,7 +260,7 @@
                         <div class="flex-horizontal">
                             <button id="timeSpeedSetCheatButton" class="fontTrebuchetMS canClick normalTabButton" style="width: 200px; height: 60px; font-size: 16px; margin: 2px;">
                                 Set Time Speed<br>
-                                Currently: <span id="timeSpeedCheat"></span>
+                                Currently: <span id="timeSpeedCheat"></span>&times;
                             </button>
                         </div>
                         <!-- <div class="flex-container" style="flex-direction: row; justify-content: center">
@@ -257,28 +270,47 @@
                 </div>
                 <div id="buyables" class="flex-vertical">
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px; text-align: center;">Every purchase of a buyable speeds up that buyable's cost growth.<br></span>
-                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px; text-align: center;">You can only buy up to <span id="buyableCap"></span> purchases of a buyable.<br></span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px; text-align: center;">You can only buy up to <span id="buyableCap"></span> purchases of a buyable<span id="buyableCapAfter"></span>.<br></span>
                     <div id='buyableList' class="flex-horizontal" style="flex-wrap: wrap; width: 1200px; margin: auto"></div>
                     <div class="flex-horizontal">
-                        <div id="praiReset" class="flex-vertical" style="margin: 4px; margin-top: 10px;">
-                            <button id="praiResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; height: 225px">
-                                <h3>PRai: <span id="praiAmount"></span></h3>
-                                Reset your progress to gain <span id="praiGain"></span> PRai.<br>
-                                <span id="praiReq">Gain at least <span id="praiReqAmt"></span> points to do a PRai reset.<br></span>
-                                <span id="praiDesc"></span><br>
-                                <br>You have <span id="praiAmt2"></span> PRai, which boosts your points by <span id="praiEffect"></span>&times;.
-                                <br>Resetting now will boost your points by <span id="praiBoostEffect"></span>&times;
+                        <div class="flex-verical">
+                            <div id="praiReset" class="flex-vertical" style="margin: 4px; margin-top: 10px;">
+                                <button id="praiResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; height: 225px">
+                                    <h3>PRai: <span id="praiAmount"></span></h3>
+                                    Reset all prior progress to gain <span id="praiGain"></span> PRai.<br>
+                                    <span id="praiReq">Gain at least <span id="praiReqAmt"></span> more points to do a PRai reset.<br></span>
+                                    <span id="praiDesc"></span><br>
+                                    <br>You have <span id="praiAmt2"></span> PRai, which boosts your points by <span id="praiEffect"></span>&times;.
+                                    <br>Resetting now will boost your points by <span id="praiBoostEffect"></span>&times;
+                                </button>
+                            </div>
+
+                            <button id="praiAutobuyerToggle" class="whiteText fontTrebuchetMS buyableButton buyableAutoButton alignCenter canClick" style="width: 375px; height: 30px; margin-left: 4px">
+                                <b>Autobuyer: <span id="praiAutobuyer"></span></b>
                             </button>
                         </div>
                         <div id="pr2Reset" class="flex-vertical" style="margin: 4px; margin-top: 10px;">
                             <button id="pr2ResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; min-height: 225px">
                                 <h3>PR2: <span id="pr2Amount"></span></h3>
-                                Reset your progress to ascend to the next PR2 level!<br>
+                                Reset all prior progress to ascend to the next PR2 level!<br>
                                 Gain at least <span id="pr2ReqAmt"></span> PRai to do a PR2 reset.<br>
                                 <div id="pr2Desc" class="whiteText fontTrebuchetMS"></div>
                             </button>
                         </div>
+                        <div id="pr3Reset" class="flex-vertical" style="margin: 4px; margin-top: 10px;">
+                            <button id="pr3ResetButton" class="whiteText buyableButton fontTrebuchetMS" style="width: 375px; min-height: 225px">
+                                <h3>PR3: <span id="pr3Amount"></span></h3>
+                                Reset all prior progress to ascend to the next PR3 level!<br>
+                                Gain at least <span id="pr3ReqAmt"></span> PRai to do a PR3 reset.<br>
+                                <div id="pr3Desc" class="whiteText fontTrebuchetMS"></div>
+                            </button>
+                        </div>
                     </div>
+                </div>
+                <div id="extract" class="flex-vertical">
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="pextractAmt"></span></b> Prestige Extract. (<b><span id="pextractAmtGain"></span></b>/s)</span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">Your Prestige Extract is boosting your points by &times;<b><span id="pextractEff"></span>!</b></span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">PRai is generating <b><span id="pextractAmtGenPRai"></span></b> Prestige Extract per second. (<b><span id="pextractAmtGenPRaiGain"></span></b>/s next PRai reset)</span>
                 </div>
                 <div id="upgrades" class="flex-vertical">
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt3"></span></b> PRai. (+<b><span id="praiAmtGain3"></span></b>)</span>
@@ -289,8 +321,8 @@
                     <div id="kuaReset" class="flex-vertical" style="margin-bottom: 8px">
                         <button id="kuaResetButton" class="whiteText fontTrebuchetMS kuaraniaiBGColor" style="width: 800px; padding: 0px; padding-bottom: 4px;">
                             <h3>Kuaraniai: <span id="kuaAmount"></span></h3>
-                            Reset your progress to gain <span id="kuaGain"></span> Kuaraniai.<br>
-                            <span id="kuaReq">Gain at least <span id="kuaReqAmt"></span> PRai to do a Kuaraniai reset.<br></span>
+                            Reset all prior progress (except for PR2) to gain <span id="kuaGain"></span> Kuaraniai.<br>
+                            <span id="kuaReq">Gain at least <span id="kuaReqAmt"></span> PRai and PRai pending combined (<span id="praiAmtGainTotal"></span>) to do a Kuaraniai reset.<br></span>
                             <span id="kuaDesc"></span><br>
                             <br>You have <span id="kuaAmt2"></span> Kuaraniai, which generates <span id="kuaEffect"></span> Kua. Shards per second.
                             <br>Resetting now will boost Kua. Shard generation by <span id="kuaBoostEffect"></span>&times;
@@ -330,6 +362,12 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id="colosseum" class="flex-vertical">
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="kuaAmt3"></span></b> Kuaraniai. (+<b><span id="kuaAmtGain"></span></b>)</span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="colPowAmt"></span></b> Colosseum Power. (<b><span id="colPowGain"></span></b>/s)</span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You may exist in Colosseum challenges for <b><span id="colTimer"></span></b> before being kicked out.</span>
+                    <div id="colChalList" class="flex-horizontal"></div>
                 </div>
             </div>
 

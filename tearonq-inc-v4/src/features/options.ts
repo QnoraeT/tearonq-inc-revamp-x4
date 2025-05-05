@@ -1,6 +1,6 @@
 import Decimal from "break_eternity.js";
 import { html, switchOptionSaveTab, switchOptionTab, tab, toHTMLvar } from "../main";
-import { deleteSave, displayModes, duplicateSave, exportSave, exportSaveList, game, importSave, importSaveList, importSFIntoNew, player, renameSave, resetTheWholeGame, saveTheFrickingGame, setAutosaveInterval, switchToSave } from "../loadSave";
+import { deleteSave, displayModes, duplicateSave, exportSave, exportSaveList, game, gameVars, importSave, importSaveList, importSFIntoNew, player, renameSave, resetTheWholeGame, saveTheFrickingGame, setAutosaveInterval, switchToSave } from "../loadSave";
 import { D } from "../misc/calc";
 import { format, formatTime } from "../misc/format";
 
@@ -30,23 +30,24 @@ export const intiHTML_Options = () => {
     toHTMLvar('notationList');
     toHTMLvar('autoSaveInterval');
 
-    // ! see loadSave.ts in the initHTML function
-    html['options-notesTabButton'].addEventListener('click', () => switchOptionTab(0));
-    html['options-linksTabButton'].addEventListener('click', () => switchOptionTab(1));
-    html['options-savingTabButton'].addEventListener('click', () => switchOptionTab(2));
-    html['options-otherTabButton'].addEventListener('click', () => switchOptionTab(3));
-    html['options-updateLogTabButton'].addEventListener('click', () => switchOptionTab(4));
-    html['options-cheatsTabButton'].addEventListener('click', () => switchOptionTab(5));
-    html['options-saving-saveListTabButton'].addEventListener('click', () => switchOptionSaveTab(0));
-    html['options-saving-saveCreateTabButton'].addEventListener('click', () => switchOptionSaveTab(1));
-    html['manualSaveButton'].addEventListener('click', () => saveTheFrickingGame(true));
-    html['autoSaveButton'].addEventListener('click', () => setAutosaveInterval());
-    html['exportSaveListButton'].addEventListener('click', () => exportSaveList());
-    html['importSaveListButton'].addEventListener('click', () => importSaveList());
-    html['importSaveFileButton'].addEventListener('click', () => importSFIntoNew());
-    html['deleteSaveListButton'].addEventListener('click', () => resetTheWholeGame(true));
-    html['timeSpeedSetCheatButton'].addEventListener('click', () => setTimeSpeed());
-
+    // see loadSave.ts in the initHTML function
+    if (!gameVars.gameLoadedFirst) {
+        html['options-notesTabButton'].addEventListener('click', () => switchOptionTab(0));
+        html['options-linksTabButton'].addEventListener('click', () => switchOptionTab(1));
+        html['options-savingTabButton'].addEventListener('click', () => switchOptionTab(2));
+        html['options-otherTabButton'].addEventListener('click', () => switchOptionTab(3));
+        html['options-updateLogTabButton'].addEventListener('click', () => switchOptionTab(4));
+        html['options-cheatsTabButton'].addEventListener('click', () => switchOptionTab(5));
+        html['options-saving-saveListTabButton'].addEventListener('click', () => switchOptionSaveTab(0));
+        html['options-saving-saveCreateTabButton'].addEventListener('click', () => switchOptionSaveTab(1));
+        html['manualSaveButton'].addEventListener('click', () => saveTheFrickingGame(true));
+        html['autoSaveButton'].addEventListener('click', () => setAutosaveInterval());
+        html['exportSaveListButton'].addEventListener('click', () => exportSaveList());
+        html['importSaveListButton'].addEventListener('click', () => importSaveList());
+        html['importSaveFileButton'].addEventListener('click', () => importSFIntoNew());
+        html['deleteSaveListButton'].addEventListener('click', () => resetTheWholeGame(true));
+        html['timeSpeedSetCheatButton'].addEventListener('click', () => setTimeSpeed());
+    }
 
     (html['notationLimitSlider'] as HTMLInputElement).value = `${player.settings.notation.notationLimit}`;
     (html['notationList'] as HTMLInputElement).value = `${player.settings.notation.notationType}`;
@@ -57,7 +58,8 @@ export const intiHTML_Options = () => {
 export const updateGame_Options = (delta: Decimal) => {
     player.settings.notation.notationLimit = Number((html['notationLimitSlider'] as HTMLInputElement).value);
     player.settings.notation.notationType = Number((html['notationList'] as HTMLInputElement).value);
-    delta
+    // to circumvent an annoying warning but won't remove the delta because that would differ from the pattern
+    delta;
 }
 
 export const updateHTML_Options = () => {
@@ -90,6 +92,9 @@ export const updateHTML_Options = () => {
         }
         if (tab.optionsTab === 3) {
             html['notationStartLimit'].textContent = `${player.settings.notation.notationLimit} digits.`;
+        }
+        if (tab.optionsTab === 5) {
+            html['timeSpeedCheat'].textContent = `${format(player.setTimeSpeed, 1)}`;
         }
     }
 }
@@ -168,6 +173,7 @@ export const updateSaveFileListHTML = () => {
         toHTMLvar(`saveFile${i}importSave`)
         toHTMLvar(`saveFile${i}exportSave`)
 
+        // resetting saveList's HTML clears all event listeners from all children, so i don't have to check here
         html[`saveFile${i}loadSave`].addEventListener('click', () => switchToSave(i));
         html[`saveFile${i}duplicateSave`].addEventListener('click', () => duplicateSave(i));
         html[`saveFile${i}deleteSave`].addEventListener('click', () => deleteSave(i));

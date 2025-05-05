@@ -179,6 +179,18 @@ body {
     border: 3px solid #da7eff;
 }
 
+.colTabButton {
+    color: #ffffff;
+    background-color: #86310080;
+    border: 3px solid #ff4800;
+    transition-duration: 0.2s;
+}
+
+.colTabButton:hover {
+    background-color: #ff5e0080; 
+    border: 3px solid #ffbc7e;
+}
+
 .alignLeft {
     text-align: left;
 }
@@ -250,6 +262,138 @@ body {
     width: 100%;
 }
 
+.absolute-text {
+    position: absolute;
+}
+
+.centered-text {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.smallColBorder {
+    border: 2px solid #ff4000;
+}
+
+.smallColBorder:hover {
+    border: 2px solid #ff9775;
+}
+
+.normColBorder {
+    border: 4px solid #ff4000;
+}
+
+.normColBorder:hover {
+    border: 4px solid #ff9775;
+}
+
+.normColBorderProg {
+    border: 4px solid #fffb00;
+}
+
+.normColBorderProg:hover {
+    border: 4px solid #fffd75;
+}
+
+.normColBorderComp {
+    border: 4px solid #00ff0d;
+}
+
+.normColBorderComp:hover {
+    border: 4px solid #8cff75;
+}
+
+.colButtonHeader {
+    transition-duration: 0.2s;
+    background-color: #521400;
+}
+
+.colButtonDesc {
+    transition-duration: 0.2s;
+    background-color: #631900;
+}
+
+.colButtonRew {
+    transition-duration: 0.2s;
+    background-color: #8d2300;
+}
+
+.colButtonProg {
+    transition-duration: 0.2s;
+    background-color: #616300;
+    box-shadow: 0 0 6px 2px rgb(66, 54, 0);
+}
+
+.colButtonHeaderProg {
+    transition-duration: 0.2s;
+    background-color: #524300;
+}
+
+.colButtonDescProg {
+    transition-duration: 0.2s;
+    background-color: #634900;
+}
+
+.colButtonRewProg {
+    transition-duration: 0.2s;
+    background-color: #8d7800;
+}
+
+.colButtonComp {
+    transition-duration: 0.2s;
+    background-color: #006319;
+    box-shadow: 0 0 6px 2px rgb(0, 66, 6);
+}
+
+.colButtonHeaderComp {
+    transition-duration: 0.2s;
+    background-color: #005204;
+}
+
+.colButtonDescComp {
+    transition-duration: 0.2s;
+    background-color: #006300;
+}
+
+.colButtonRewComp {
+    transition-duration: 0.2s;
+    background-color: #108d00;
+}
+
+
+.colosseum-container {
+    position: relative;
+    width: 100%;
+    color: white;
+}
+
+.colButton {
+    transition-duration: 0.2s;
+    border: 4px solid #ff4000;
+    box-shadow: 0 0 10px 2px rgb(66, 17, 0);
+}
+
+.colButton:hover {
+    border: 4px solid #ff9b7a;
+    box-shadow: 0 0 20px 2px #8f2400;
+    cursor: pointer;
+}
+
+.colButtonProg:hover {
+    background-color: #7a6e00;
+    box-shadow: 0 0 20px 2px #8f6e00;
+    cursor: pointer;
+}
+
+.colButtonComp:hover {
+    background-color: #187a00;
+    box-shadow: 0 0 20px 2px #188f00;
+    cursor: pointer;
+}
+
 /* .text {
     display: inline;
 }
@@ -305,22 +449,6 @@ body {
     cursor: pointer;
 }
 
-.smallColBorder {
-    border: 0.15vw solid #ff4000;
-}
-
-.smallColBorder:hover {
-    border: 0.15vw solid #ff9775;
-}
-
-.normColBorder {
-    border: 0.36vw solid #ff4000;
-}
-
-.normColBorder:hover {
-    border: 0.36vw solid #ff9775;
-}
-
 .smallTaxBorder {
     border: 0.15vw solid #ffd900;
 }
@@ -353,149 +481,28 @@ body {
     border: 0.36vw solid #ffa060;
 }
 
-.normColBorderProg {
-    border: 0.36vw solid #fffb00;
-}
-
-.normColBorderProg:hover {
-    border: 0.36vw solid #fffd75;
-}
-
-.normColBorderComp {
-    border: 0.36vw solid #00ff0d;
-}
-
-.normColBorderComp:hover {
-    border: 0.36vw solid #8cff75;
-}
-
-.colButtonHeader {
-    transition-duration: 0.2s;
-    background-color: #521400;
-}
-
-.colButtonDesc {
-    transition-duration: 0.2s;
-    background-color: #631900;
-}
-
-.colButtonRew {
-    transition-duration: 0.2s;
-    background-color: #8d2300;
-}
-
-.colButtonProg {
-    transition-duration: 0.2s;
-    background-color: #616300;
-    box-shadow: 0 0 0.6vw 0.24vw rgb(66, 54, 0);
-}
-
-.colButtonHeaderProg {
-    transition-duration: 0.2s;
-    background-color: #524300;
-}
-
-.colButtonDescProg {
-    transition-duration: 0.2s;
-    background-color: #634900;
-}
-
-.colButtonRewProg {
-    transition-duration: 0.2s;
-    background-color: #8d7800;
-}
-
-.colButtonComp {
-    transition-duration: 0.2s;
-    background-color: #006319;
-    box-shadow: 0 0 0.6vw 0.24vw rgb(0, 66, 6);
-}
-
-.colButtonHeaderComp {
-    transition-duration: 0.2s;
-    background-color: #005204;
-}
-
-.colButtonDescComp {
-    transition-duration: 0.2s;
-    background-color: #006300;
-}
-
-.colButtonRewComp {
-    transition-duration: 0.2s;
-    background-color: #108d00;
-}
-
-.main-container {
-    width: 15vw;
-    height: 22vw;
-}
-
-.first-cont,
-.second-cont,
-.third-cont {
-    position: relative;
-    width: 100%;
-    color: white;
-}
-
-.generic-text {
-    position: absolute;
-}
-
-.centered-text {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.colButton {
-    transition-duration: 0.2s;
-    background-color: #631900;
-    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 17, 0);
-}
-
-.colButton:hover {
-    background-color: #7a1f00;
-    box-shadow: 0 0 1.5vw 0.24vw #8f2400;
-    cursor: pointer;
-}
-
-.colButtonProg:hover {
-    background-color: #7a6e00;
-    box-shadow: 0 0 1.5vw 0.24vw #8f6e00;
-    cursor: pointer;
-}
-
-.colButtonComp:hover {
-    background-color: #187a00;
-    box-shadow: 0 0 1.5vw 0.24vw #188f00;
-    cursor: pointer;
-}
 
 .taxButton {
     transition-duration: 0.2s;
     background-color: #634c00;
-    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 54, 0);
+    box-shadow: 0 0 0.8vw 2px rgb(66, 54, 0);
 }
 
 .taxButton:hover {
     background-color: #7a6800;
-    box-shadow: 0 0 1.5vw 0.24vw #8f7a00;
+    box-shadow: 0 0 20px 2px #8f7a00;
     cursor: pointer;
 }
 
 .groButton {
     transition-duration: 0.2s;
     background-color: #632f00;
-    box-shadow: 0 0 0.8vw 0.24vw rgb(66, 26, 0);
+    box-shadow: 0 0 0.8vw 2px rgb(66, 26, 0);
 }
 
 .groButton:hover {
     background-color: #7a3900;
-    box-shadow: 0 0 1.5vw 0.24vw #8f3f00;
+    box-shadow: 0 0 20px 2px #8f3f00;
     cursor: pointer;
 }
 
@@ -566,12 +573,12 @@ body {
 
 /* .kuaButton2 {
     transition-duration: 0.2s;
-    border: 0.24vw solid #b900ff;
+    border: 2px solid #b900ff;
     background-color: #4d008b;
 }
 
 .kuaButton2:hover {
-    border: 0.24vw solid #ca37ff;
+    border: 2px solid #ca37ff;
     background-color: #5f00ad;
 } */
 
@@ -658,6 +665,23 @@ body {
     width: 20px; /* Set a specific slider handle width */
     height: 20px; /* Slider handle height */
     background: #04aa6d; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.colSlider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: #ff5100; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.colSlider::-moz-range-thumb {
+    width: 20px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: #ff5100; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 

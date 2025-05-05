@@ -29,6 +29,7 @@ export type Player = {
     gameProgress: {
         points: DecimalSource
         totalPointsInPRai: DecimalSource
+        totalPointsInCol: DecimalSource
         buyables: Array<{
             bought: DecimalSource
             boughtInKua: DecimalSource
@@ -42,10 +43,16 @@ export type Player = {
         prai: DecimalSource
         praiAuto: boolean
         timeInPRai: DecimalSource
-        prestigeEssence: DecimalSource
+        prestigeExtract: DecimalSource
+        pEBuyables: Array<{
+            bought: DecimalSource
+        }>
         pr2: DecimalSource
         pr2Auto: boolean
         timeInPR2: DecimalSource
+        pr3: DecimalSource
+        pr3Auto: boolean
+        timeInPR3: DecimalSource
         kua: DecimalSource
         kuaAuto: boolean
         timeInKua: DecimalSource
@@ -55,6 +62,7 @@ export type Player = {
         kuaDynamicUpgs: Array<DecimalSource> // the effects kinda work like exotic dimensions' yellow quarks
         colPower: DecimalSource
         colCompleted: Array<DecimalSource>
+        colDifficulty: Array<DecimalSource>
         colChallenge: number | null
         timeInCol: DecimalSource
     }
@@ -78,55 +86,86 @@ export type Temp = {
         buyableCap: Decimal,
         buyables: Array<{
             cost: Decimal,
+            scalingSpeed: Decimal,
             target: Decimal,
-            effect: Decimal,
-            effectBase: Decimal,
+            eff: Decimal,
+            effBase: Decimal,
             unlocked: boolean,
             autoUnlocked: boolean,
+            autoBought: Decimal,
+            autoSpeed: Decimal,
             canBuy: boolean
         }>,
-        praiReq: Decimal,
-        praiGain: Decimal,
-        praiExp: Decimal,
-        praiNext: Decimal,
-        praiEffect: Decimal,
-        praiNextEffect: Decimal,
+        prai: {
+            req: Decimal,
+            gain: Decimal,
+            exp: Decimal,
+            next: Decimal,
+            eff: Decimal,
+            nextEff: Decimal
+        }
         pr2Req: Decimal,
-        pr2Effect: Decimal,
-        staticUpgradeCap: Decimal,
-        staticUpgrades: Array<{
-            effect: Decimal
+        pr3: {
+            req: Decimal,
+            target: Decimal,
+            eff: Decimal
+        },
+        staticUpgCap: Decimal,
+        staticUpgs: Array<{
+            eff: Decimal
             cost: Decimal
             target: Decimal
             unlocked: boolean
             canBuy: boolean
         }>
-        kuaReq: Decimal
-        kuaGain: Decimal
-        kuaNext: Decimal
-        kuaEffect: Decimal
-        kuaNextEffect: Decimal
-        ksGain: Decimal
-        kpGain: Decimal
-        kpupgEffs: Array<Decimal>
-        kuupgEffs: Array<Decimal>
-        ksdynEffs: Array<Decimal>
-        kpdynEffs: Array<Decimal>
-        ksDynamicCost: Decimal
-        kpDynamicCost: Decimal
-        ksDynamicTarget: Decimal
-        kpDynamicTarget: Decimal
+        kua: {
+            req: Decimal
+            gain: Decimal
+            upgEffs: Array<Decimal>
+            next: Decimal
+            eff: Decimal
+            nextEff: Decimal
+        }
+        ks: {
+            gain: Decimal
+            dynEffs: Array<Decimal>
+            dynCost: Decimal
+            dynTarget: Decimal
+        }
+        kp: {
+            gain: Decimal
+            upgEffs: Array<Decimal>
+            dynEffs: Array<Decimal>
+            dynCost: Decimal
+            dynTarget: Decimal
+        }
+        pEG: Decimal
+        pEGP: Decimal // prai only
+        pEGR: Decimal // after prai reset
+        pEGPR: Decimal // prai only after prai reset
+        pEEffect: Decimal
+        pEBuyables: Array<{
+            eff1: Decimal
+            eff2: Decimal
+            nextEff1: Decimal
+            nextEff2: Decimal
+        }>
+        baseColGain: Decimal
+        trueColGain: Decimal
+        colMaxTime: Decimal
     }
 }
 
 export type Tab = {
     mainTab: number
+    buyablesTab: number
     optionsTab: number
     optionsSaveTab: number
 };
 
 export type GameVars = {
     delta: number,
+    gameLoadedFirst: boolean,
     trueDelta: number,
     lastFPSCheck: number,
     fpsList: Array<number>,
