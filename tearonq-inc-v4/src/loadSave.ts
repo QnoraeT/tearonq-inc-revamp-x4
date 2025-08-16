@@ -4,7 +4,7 @@ import { spawnPopup } from "./misc/popups";
 import { updatePlayerData } from './versionControl';
 import { D } from './misc/calc';
 import { initHTML_Main, MAIN_BUYABLE_DATA as MAIN_BUYABLE_DATA } from './features/mainBuyables';
-import { gameLoop, html, switchMainTab, toHTMLvar, updateHTML } from './main';
+import { gameLoop, html, switchDisclaimerTab, switchMainTab, toHTMLvar, updateHTML } from './main';
 import { initHTML_PRai } from './features/prai';
 import { initHTML_PR2 } from './features/pr2+';
 import { initHTML_StaticUpgrades, STATIC_UPGRADES } from './features/staticUpgrades';
@@ -111,6 +111,9 @@ function initTemp(): Temp {
     const prestigeExtractBuyables = [];
     for (let i = 0; i < PRESTIGE_EXTRACT_BUYABLES.length; i++) {
         prestigeExtractBuyables.push({
+            cost: D(0),
+            canBuy: false,
+            target: D(0),
             eff1: D(0),
             eff2: D(0),
             nextEff1: D(0),
@@ -257,6 +260,10 @@ export const initHTML = () => {
     toHTMLvar('options-saving-saveList');
     toHTMLvar('options-saving-saveCreate');
     toHTMLvar('disclaimer');
+    toHTMLvar('disclaimer-disclaimer');
+    toHTMLvar('disclaimer-info');
+    toHTMLvar('disclaimer-disclaimerTabButton');
+    toHTMLvar('disclaimer-infoTabButton');
     toHTMLvar('buyables');
     toHTMLvar('upgrades');
     toHTMLvar('kuaraniai');
@@ -287,6 +294,8 @@ export const initHTML = () => {
 
     if (!gameVars.gameLoadedFirst) {
         html['disclaimerTabButton'].addEventListener('click', () => switchMainTab(-1));
+        html['disclaimer-disclaimerTabButton'].addEventListener('click', () => switchDisclaimerTab(0));
+        html['disclaimer-infoTabButton'].addEventListener('click', () => switchDisclaimerTab(1));
         html['buyableTabButton'].addEventListener('click', () => switchMainTab(0));
         html['optionTabButton'].addEventListener('click', () => switchMainTab(1));
         html['statTabButton'].addEventListener('click', () => switchMainTab(2));

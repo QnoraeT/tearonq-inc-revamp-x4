@@ -145,6 +145,9 @@ export type Temp = {
         pEGPR: Decimal // prai only after prai reset
         pEEffect: Decimal
         pEBuyables: Array<{
+            cost: Decimal
+            canBuy: boolean
+            target: Decimal
             eff1: Decimal
             eff2: Decimal
             nextEff1: Decimal
@@ -158,6 +161,7 @@ export type Temp = {
 
 export type Tab = {
     mainTab: number
+    disclaimerTab: number
     buyablesTab: number
     optionsTab: number
     optionsSaveTab: number

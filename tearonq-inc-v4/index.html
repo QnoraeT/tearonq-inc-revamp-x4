@@ -41,7 +41,7 @@
                 <div id="tabs" style="margin-bottom: 10px">
                     <div class="flex-horizontal" style="flex-wrap: wrap;">
                         <button id="disclaimerTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
-                            Disclaimer
+                            Information
                         </button>
                         <button id="buyableTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Buyables
@@ -70,20 +70,30 @@
                     </div>
                 </div>
                 <div id="disclaimer" class="flex-vertical">
-                    <span class="fontTrebuchetMS whiteText" style="text-align: center">
-                        <b style="font-size: 20px">You may find some weird or disagreeable things in this incremental!</b><br>
-                        This was a game mostly made for fun, and mostly for an incremental I wanted to make when I was bored.<br>
-                        <br>
-                        Genres: Abstract, Basic JS/HTML, Hybrid (Active/Idle)
-                        <br>
-                        Inspired by <span style="color: #a040ff">Jacorb</span>, <span style="color: #0c0">Hevipelle</span>, <span style="color: #c00">MrRedShark77</span>, and more!
-                    </span>
+                    <div class="flex-horizontal" style="flex-wrap: wrap; margin-bottom: 10px">
+                        <button id="disclaimer-disclaimerTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
+                            Disclaimer
+                        </button>
+                        <button id="disclaimer-infoTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
+                            Information
+                        </button>
+                    </div>
+                    <div id="disclaimer-disclaimer" class="flex-vertical">
+                        <span class="fontTrebuchetMS whiteText" style="text-align: center">
+                            <b style="font-size: 20px">You may find some weird or disagreeable things in this incremental!</b><br>
+                            This was a game mostly made for fun, and mostly for an incremental I wanted to make when I was bored.<br>
+                            <br>
+                            Genres: Abstract, Basic JS/HTML, Hybrid (Active/Idle)
+                            <br>
+                            Inspired by <span style="color: #a040ff">Jacorb</span>, <span style="color: #0c0">Hevipelle</span>, <span style="color: #c00">MrRedShark77</span>, and more!
+                        </span>
+                    </div>
+                    <div id="disclaimer-info" class="flex-vertical">
+
+                    </div>
                 </div>
                 <div id="options" class="flex-vertical">
                     <div class="flex-horizontal" style="flex-wrap: wrap; margin-bottom: 10px">
-                        <button id="options-notesTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
-                            Information
-                        </button>
                         <button id="options-linksTabButton" class="fontTrebuchetMS canClick tabButton normalTabButton">
                             Links
                         </button>
@@ -308,9 +318,10 @@
                     </div>
                 </div>
                 <div id="extract" class="flex-vertical">
-                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="pextractAmt"></span></b> Prestige Extract. (<b><span id="pextractAmtGain"></span></b>/s)</span>
+                    <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="pextractAmt"></span></b> Prestige Extract. (<b><span id="pextractAmtGain"></span></b>/s, <b><span id="pextractAmtNextGain"></span></b>/s next PRai reset)</span>
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">Your Prestige Extract is boosting your points by &times;<b><span id="pextractEff"></span>!</b></span>
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">PRai is generating <b><span id="pextractAmtGenPRai"></span></b> Prestige Extract per second. (<b><span id="pextractAmtGenPRaiGain"></span></b>/s next PRai reset)</span>
+                    <div id="pextractBuyableList" class="flex-horizontal" style="width: 700px; flex-wrap: wrap"></div>
                 </div>
                 <div id="upgrades" class="flex-vertical">
                     <span class="whiteText fontTrebuchetMS" style="margin-bottom: 4px;">You have <b><span id="praiAmt3"></span></b> PRai. (+<b><span id="praiAmtGain3"></span></b>)</span>

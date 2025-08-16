@@ -27,6 +27,7 @@ export const elIm = (id: string): HTMLImageElement => document.getElementById(id
 
 export const tab: Tab = ({
     mainTab: -1,
+    disclaimerTab: 0,
     buyablesTab: 0,
     optionsTab: 0,
     optionsSaveTab: 0
@@ -161,6 +162,10 @@ export const updateHTML = () => {
     html['ppsCounter'].textContent = `${tmp.gameIsRunning ? format(tmp.game.pointGen) : 'Please wait!'}`;
     html['timeSinceSave'].textContent = `${formatTime(gameVars.sessionTime - gameVars.lastSave)} / ${formatTime(game.autoSaveInterval)}`;
     html['disclaimer'].classList.toggle("hide", tab.mainTab !== -1);
+    if (tab.mainTab === -1) {
+        html['disclaimer-disclaimer'].classList.toggle("hide", tab.disclaimerTab !== 0);
+        html['disclaimer-info'].classList.toggle("hide", tab.disclaimerTab !== 1);
+    }
     updateHTML_Main();
     updateHTML_PRai();
     updateHTML_PR2();
@@ -205,6 +210,10 @@ document.onkeyup = function (e) {
 
 export const switchMainTab = (id: number) => {
     tab.mainTab = id;
+}
+
+export const switchDisclaimerTab = (id: number) => {
+    tab.disclaimerTab = id;
 }
 
 export const switchBuyableTab = (id: number) => {

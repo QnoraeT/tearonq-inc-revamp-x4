@@ -1,4 +1,4 @@
-import Decimal from "break_eternity.js"
+import Decimal, { DecimalSource } from "break_eternity.js"
 import { gameVars, player, tmp } from "../loadSave"
 import { D } from "../misc/calc"
 import { html, tab, toHTMLvar } from "../main"
@@ -64,26 +64,11 @@ export const updateGame_PRai = (delta: Decimal) => {
     tmp.game.prai.next = tmp.game.prai.next.sub(player.gameProgress.totalPointsInPRai);
 
     if (player.gameProgress.praiAuto) {
-        player.gameProgress.prai = Decimal.max(player.gameProgress.prai, 0).add(tmp.game.prai.gain.mul(delta).mul(PR3_EFFECTS[5](player.gameProgress.pr3)));
+        player.gameProgress.prai = Decimal.max(player.gameProgress.prai, 0).add(tmp.game.prai.gain.mul(delta).mul(PR3_EFFECTS[5](player.gameProgress.pr3).div(100)));
     }
 
-    tmp.game.prai.eff = Decimal.max(player.gameProgress.prai, 0).add(1).log10().add(1).pow(2.633975697259367);
-    if (hasKuaStaticUpg('power', 13)) {
-        tmp.game.prai.eff = Decimal.max(player.gameProgress.prai, 0).add(1).log10().add(1).root(5).sub(1).mul(5).pow10();
-    }
-    if (Decimal.gte(player.gameProgress.pr2, 6)) {
-        tmp.game.prai.eff = tmp.game.prai.eff.pow(2);
-    }
-    tmp.game.prai.eff = tmp.game.prai.eff.pow(tmp.game.kp.dynEffs[5]);
-
-    tmp.game.prai.nextEff = Decimal.add(player.gameProgress.prai, tmp.game.prai.gain).max(0).add(1).log10().add(1).pow(2.633975697259367);
-    if (hasKuaStaticUpg('power', 13)) {
-        tmp.game.prai.nextEff = Decimal.add(player.gameProgress.prai, tmp.game.prai.gain).max(0).add(1).log10().add(1).root(5).sub(1).mul(5).pow10();
-    }
-    if (Decimal.gte(player.gameProgress.pr2, 6)) {
-        tmp.game.prai.nextEff = tmp.game.prai.nextEff.pow(2);
-    }
-    tmp.game.prai.nextEff = tmp.game.prai.nextEff.pow(tmp.game.kp.dynEffs[5]);
+    tmp.game.prai.eff = getPRaiEff(player.gameProgress.prai);
+    tmp.game.prai.nextEff = getPRaiEff(Decimal.add(player.gameProgress.prai, tmp.game.prai.gain));
 }
 
 export const updateHTML_PRai = () => {
@@ -123,6 +108,19 @@ export const updateHTML_PRai = () => {
             html['praiAutobuyer'].textContent = player.gameProgress.praiAuto ? 'On' : 'Off';
         }
     }
+}
+
+export const getPRaiEff = (prai: DecimalSource) => {
+    let eff = Decimal.max(prai, 0).add(1).log10().add(1).pow(2.633975697259367);
+    if (hasKuaStaticUpg('power', 13)) {
+        eff = Decimal.max(player.gameProgress.prai, 0).add(1).log10().add(1).root(5).sub(1).mul(5).pow10();
+    }
+    if (Decimal.gte(player.gameProgress.pr2, 6)) {
+        eff = eff.pow(2);
+    }
+    eff = eff.pow(tmp.game.kp.dynEffs[5]);
+    eff = eff.pow(tmp.game.pEBuyables[7].eff2);
+    return eff;
 }
 
 export const praiReset = (override: boolean) => {

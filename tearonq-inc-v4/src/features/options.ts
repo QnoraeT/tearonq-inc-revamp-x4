@@ -7,7 +7,6 @@ import { format, formatTime } from "../misc/format";
 export const NOTATION_LIST = ["Scientific", "Engineering", "Logarithm", "Logarithm Delayed", "Letters", "Infinity"];
 
 export const intiHTML_Options = () => {
-    toHTMLvar('options-notesTabButton');
     toHTMLvar('options-linksTabButton');
     toHTMLvar('options-savingTabButton');
     toHTMLvar('options-otherTabButton');
@@ -32,7 +31,6 @@ export const intiHTML_Options = () => {
 
     // see loadSave.ts in the initHTML function
     if (!gameVars.gameLoadedFirst) {
-        html['options-notesTabButton'].addEventListener('click', () => switchOptionTab(0));
         html['options-linksTabButton'].addEventListener('click', () => switchOptionTab(1));
         html['options-savingTabButton'].addEventListener('click', () => switchOptionTab(2));
         html['options-otherTabButton'].addEventListener('click', () => switchOptionTab(3));

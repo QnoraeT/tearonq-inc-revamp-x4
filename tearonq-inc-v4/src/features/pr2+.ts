@@ -32,12 +32,12 @@ export const initHTML_PR2 = () => {
 export const updateGame_PR2 = (delta: Decimal) => {
     player.gameProgress.timeInPR2 = Decimal.max(player.gameProgress.timeInPR2, 0).add(delta);
 
-    tmp.game.pr3.req = smoothExp(Decimal.max(player.gameProgress.pr3, 0), 1.05, false).pow_base(1e10).mul(1e50);
+    tmp.game.pr3.req = smoothExp(Decimal.max(player.gameProgress.pr3, 0), 1.05, false).pow_base(1e20).mul(1e50);
     tmp.game.pr3.req = tmp.game.pr3.req.div(tmp.game.ks.dynEffs[3]);
 
     tmp.game.pr3.target = D(player.gameProgress.prai);
     tmp.game.pr3.target = tmp.game.pr3.target.mul(tmp.game.ks.dynEffs[3]);
-    tmp.game.pr3.target = smoothExp(Decimal.div(tmp.game.pr3.target, 1e50).max(1).log(1e10), 1.05, true);
+    tmp.game.pr3.target = smoothExp(Decimal.div(tmp.game.pr3.target, 1e50).max(1).log(1e20), 1.05, true);
 
     if (Decimal.gte(player.gameProgress.pr2, 10)) {
         tmp.game.pr2Req = D(Infinity);

@@ -170,9 +170,13 @@ export const updateGame_Main = (delta: Decimal) => {
             }
             if (i === 2) {
                 tmp.game.buyables[i].scalingSpeed = tmp.game.buyables[i].scalingSpeed.mul(Decimal.sub(1, tmp.game.kp.dynEffs[8]));
+                tmp.game.buyables[i].scalingSpeed = tmp.game.buyables[i].scalingSpeed.div(tmp.game.pEBuyables[2].eff2);
             }
             if (i >= 0 && i <= 2 && hasKuaStaticUpg('power', 11)) {
                 tmp.game.buyables[i].scalingSpeed = tmp.game.buyables[i].scalingSpeed.mul(Decimal.sub(1, tmp.game.kp.upgEffs[11]));
+            }
+            if (i === 3 || i === 4) {
+                tmp.game.buyables[i].scalingSpeed = tmp.game.buyables[i].scalingSpeed.div(tmp.game.pEBuyables[5].eff2);
             }
 
             tmp.game.buyables[i].target = D(0);
@@ -189,10 +193,11 @@ export const updateGame_Main = (delta: Decimal) => {
                     tmp.game.buyables[i].target = tmp.game.buyables[i].target.div(tmp.game.staticUpgs[0].eff);
                 }
                 if (i === 0) {
+                    tmp.game.buyables[i].target = tmp.game.buyables[i].target.mul(tmp.game.pEBuyables[3].eff2);
                     if (hasKuaStaticUpg('power', 5)) {
                         tmp.game.buyables[i].target = tmp.game.buyables[i].target.mul(tmp.game.kp.upgEffs[5]);
                     }
-                    tmp.game.buyables[i].target = tmp.game.buyables[i].target.mul(tmp.game.buyables[1].eff)
+                    tmp.game.buyables[i].target = tmp.game.buyables[i].target.mul(tmp.game.buyables[1].eff);
                 }
                 // end cost changes
                 tmp.game.buyables[i].target = tmp.game.buyables[i].target.layeradd10(MAIN_BUYABLE_DATA[i].baseCostGrowthData.exp.neg());
@@ -254,6 +259,7 @@ export const updateGame_Main = (delta: Decimal) => {
                 if (hasKuaStaticUpg('power', 5)) {
                     tmp.game.buyables[i].cost = tmp.game.buyables[i].cost.div(tmp.game.kp.upgEffs[5]);
                 }
+                tmp.game.buyables[i].cost = tmp.game.buyables[i].cost.div(tmp.game.pEBuyables[3].eff2);
             }
             if (i === 1 && Decimal.gte(player.gameProgress.staticUpgrades[0].bought, 1)) {
                 tmp.game.buyables[i].cost = tmp.game.buyables[i].cost.mul(tmp.game.staticUpgs[0].eff);
@@ -322,6 +328,8 @@ export const updateGame_Main = (delta: Decimal) => {
     }
     tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.pEEffect);
     tmp.game.pointGen = tmp.game.pointGen.mul(PR3_EFFECTS[0](player.gameProgress.pr3));
+    tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.pEBuyables[0].eff2);
+    tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.pEBuyables[1].eff2);
     if (!tmp.game.inAnyChallenge) {
         tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.kp.dynEffs[0]);
         tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.kp.dynEffs[6]);
@@ -334,6 +342,10 @@ export const updateGame_Main = (delta: Decimal) => {
     if (hasKuaStaticUpg('power', 12) && tmp.game.inAnyChallenge) {
         tmp.game.pointGen = tmp.game.pointGen.mul(tmp.game.kp.upgEffs[12]);
     }
+    if (tmp.game.pointGen.gte(1e100)) {
+        tmp.game.pointGen = tmp.game.pointGen.div(1e100).pow(tmp.game.pEBuyables[4].eff2).mul(1e100);
+    }
+    tmp.game.pointGen = tmp.game.pointGen.pow(tmp.game.pEBuyables[6].eff2);
     tmp.game.pointGen = tmp.game.pointGen.pow(tmp.game.kp.dynEffs[9]);
 
     player.gameProgress.points = Decimal.max(player.gameProgress.points, 0).add(tmp.game.pointGen.mul(delta));
